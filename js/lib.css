@@ -1,0 +1,130 @@
+.aw-todolist .clear { clear: both;}
+.aw-todolist .loading,
+.aw-todolist .nullitem { 
+	text-align: center;
+	padding: 70px 0; 
+}
+
+.aw-todolist .pagetl {
+    color: #333333;
+    font-size: 1.28em;
+    font-weight: bold;
+    padding-bottom: 0.5em;
+
+	font-weight: normal !important;
+}
+
+/* * * * * * AHref Button * * * * */
+.aw-todolist a.habtn {
+	border-bottom: 1px dotted;
+	text-decoration: none;
+	margin: 0 5px;
+}
+.aw-todolist a.warn {
+	color: #DA4242;
+}
+
+/* * * * Превьюшки * * * * */
+.aw-todolist .tmb24 { width: 24px; height: 24px; }
+.aw-todolist .tmb24 img { max-width: 24px; max-height: 24px; }
+
+.aw-todolist .tmb { display: table; }
+.aw-todolist .tmb .tmbpre {
+	display: table-cell;
+	vertical-align: middle;
+}
+.aw-todolist .tmb .tmbpre img {
+	display: block;
+	margin: 0 auto;
+}
+
+
+/* * * * * * * * * * Editor Form * * * * * * * */
+.aw-todolist .editform {
+	padding: 10px 0;
+	/* background-color: #F9F5DF; /**/
+}
+.aw-todolist .editform .dsc,
+.aw-todolist .viewform .dsc {
+	color: #555555;
+	font-size: .9em;
+	/* width: 400px; /**/
+}
+
+.aw-todolist .editform h3,
+.aw-todolist .viewform h3 {
+    color: #333333;
+    font-size: 1.28em;
+    font-weight: bold;
+    padding-bottom: 0.5em;
+
+	font-weight: normal !important;
+}
+.aw-todolist .editform h4,
+.aw-todolist .viewform h4 {
+	margin-bottom: 10px;
+	font-weight: bold;
+}
+.aw-todolist .editform .group,
+.aw-todolist .viewform .group {
+	margin: 0 20px;
+	border-bottom: 1px solid #E3E3D7;
+	margin-bottom: 1em;
+	padding-bottom: .8em;
+}
+.aw-todolist .editform .fieldline {
+	margin-bottom: 10px;
+}
+.aw-todolist .editform dl,
+.aw-todolist .viewform dl {
+	margin: 0 0 0.3em;
+    padding: 0;
+    clear: both;
+}
+.aw-todolist .editform dt,
+.aw-todolist .viewform dt {
+    float: left;
+    padding: 0.5em 0 0.5em 0;
+    width: 12em;
+}
+.aw-todolist .viewform dt {
+	text-align: right;
+	color: #999999;
+}
+
+.aw-todolist .editform dd,
+.aw-todolist .viewform dd  {
+    float: none;
+    margin-left: 13em;
+    padding: 0.5em 0;
+}
+.aw-todolist .editform p {
+	margin: 5px 0 7px;
+}
+.aw-todolist .editform input.inp,
+.aw-todolist .editform select.inp,
+.aw-todolist .editform textarea.inp {
+    border: 1px solid #ACAEB4;
+    border-radius: 3px 3px 3px 3px;
+    line-height: 20px;
+    padding: 3px;
+    width: 400px;
+}
+.aw-todolist .editform select.inp {
+	width: 407px;
+}
+.aw-todolist .editform textarea.inp {
+	height: 100px;
+}
+.aw-todolist .editform .baction {
+	margin-top: 10px;
+	margin-right: 2em;
+}
+.aw-todolist .editform .baction input {
+ 	margin-right: 10px;
+    padding: 2px 5px;	
+}
+.aw-todolist .editform .baction .error {
+	color: red;
+	margin-right: 10px;
+}
