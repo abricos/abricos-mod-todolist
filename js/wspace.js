@@ -36,8 +36,7 @@ Component.entryPoint = function(NS){
 		'ManagerWidget': 'manager',
 		'AboutWidget': 'about'
 	};
-	GMIDI = {
-	};
+	GMIDI = {};
 	var DEFPAGE = {
 		'component': 'manager',
 		'wname': 'ManagerWidget',

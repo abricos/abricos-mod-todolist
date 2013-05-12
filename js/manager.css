@@ -8,3 +8,9 @@
 .aw-todolist .manager .brdtable .brdrcol {
 	padding-left: 5px;
 }
+.aw-todolist .manager .manbtns {
+	border-bottom: 1px solid #D1D3DC;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	text-align: right;
+}

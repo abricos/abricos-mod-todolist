@@ -55,6 +55,7 @@ class TodoListManager extends Ab_ModuleManager {
 			case "initdata": return $this->InitDataToAJAX();
 			case "grouplist": return $this->GroupListToAJAX();
 			case "todolist": return $this->TodoListToAJAX();
+			case "todosave": return $this->TodoSaveToAJAX($d->todoid, $d->savedata);
 		}
 
 		return null;
@@ -117,6 +118,43 @@ class TodoListManager extends Ab_ModuleManager {
 		
 		$ret = new stdClass();
 		$ret->todos = $list->ToAJAX();
+		return $ret;
+	}
+	
+	/**
+	 * @param integer $todoid
+	 * @param object $sd
+	 * @return TodoItem
+	 */
+	public function TodoSave($todoid, $sd){
+		if (!$this->IsWriteRole()){ return null; }
+
+		$todoid = intval($todoid);
+		$utm  = Abricos::TextParser(true);
+		$utm->jevix->cfgSetAutoBrMode(true);
+		
+		$sd->tl = $utm->Parser($sd->tl);
+		
+		if ($todoid == 0){
+			$todoid = TodoListQuery::TodoAppend($this->db, $this->userid, $sd);
+		}else{
+			TodoListQuery::TodoUpdate($this->db, $this->userid, $todoid, $sd);
+		}
+		
+		$d = TodoListQuery::Todo($this->db, $this->userid, $todoid);
+		if (empty($d)){ return null; }
+		
+		return new TodoItem($d);
+	}
+	
+	public function TodoSaveToAJAX($todoid, $sd){
+		$todo = $this->TodoSave($todoid, $sd);
+		
+		if (empty($todo)){ return null; }
+		
+		$ret = new stdClass();
+		$ret->todo = $todo->ToAJAX();
+		
 		return $ret;
 	}
 

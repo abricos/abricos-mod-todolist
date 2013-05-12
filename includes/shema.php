@@ -17,7 +17,7 @@ if ($updateManager->isInstall()){
 	
 	$db->query_write("
 		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_group (
-			`groupid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Идентификатор',
+			`groupid` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 			`parentgroupid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Родитель',
 			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
 			
@@ -35,7 +35,7 @@ if ($updateManager->isInstall()){
 	// приоритетность задачи
 	$db->query_write("
 		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_priority (
-			`priorityid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Идентификатор',
+			`priorityid` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
 				
 			`title` varchar(250) NOT NULL DEFAULT '' COMMENT 'Название',
@@ -53,7 +53,7 @@ if ($updateManager->isInstall()){
 	// личное отношение к задачи
 	$db->query_write("
 		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_like (
-			`likeid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Идентификатор',
+			`likeid` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
 	
 			`title` varchar(250) NOT NULL DEFAULT '' COMMENT 'Название',
@@ -71,9 +71,9 @@ if ($updateManager->isInstall()){
 	
 	$db->query_write("
 		CREATE TABLE IF NOT EXISTS ".$pfx."todolist (
-			`todoid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Идентификатор',
+			`todoid` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
 			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
-			`gropid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Группа',
+			`groupid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Группа',
 			
 			`module` varchar(50) NOT NULL DEFAULT '' COMMENT 'Модуль инициатор',
 				

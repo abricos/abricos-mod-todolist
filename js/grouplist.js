@@ -64,7 +64,7 @@ Component.entryPoint = function(NS){
 				__self = this, man = this.manager;
 			
 			NS.manager.groupList.foreach(function(catel){
-				var div = document.createGroup('div');
+				var div = document.createElement('div');
 				div['catalogGroup'] = catel;
 				
 				elList.appendChild(div);

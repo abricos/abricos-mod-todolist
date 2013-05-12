@@ -27,6 +27,10 @@ Component.entryPoint = function(NS){
 	NS.Item = SysNS.Item;
 	NS.ItemList = SysNS.ItemList;
 	
+	NS.textToEdit = function(s){
+		return s.replace(/<br\/>/gi, '');
+	};
+	
 	var WS = "#app={C#MODNAMEURI}/wspace/ws/";
 	
 	NS.navigator = {
@@ -59,7 +63,6 @@ Component.entryPoint = function(NS){
 	};
 	YAHOO.extend(GroupList, SysNS.ItemList, {});
 	NS.GroupList = GroupList;
-	
 	
 	var Todo = function(d){
 		d = L.merge({
@@ -97,6 +100,7 @@ Component.entryPoint = function(NS){
 					'do': 'initdata'
 				}, function(d){
 					__self._updateGroupList(d);
+					__self._updateTodoList(d);
 					NS.life(callback, __self);
 				});
 			});
@@ -117,7 +121,7 @@ Component.entryPoint = function(NS){
 			}
 			this.groupList.update(d['groups']['list']);
 		},
-		groupList: function(callback){
+		groupListLoad: function(callback){
 			var __self = this;
 			this.ajax({
 				'do': 'grouplist'
@@ -126,18 +130,44 @@ Component.entryPoint = function(NS){
 				NS.life(callback);
 			});
 		},
-		_updateGroupList: function(d){
+		_updateTodoList: function(d){
 			if (!L.isValue(d) || !L.isValue(d['todos']) || !L.isValue(d['todos']['list'])){
 				return null;
 			}
 			this.todoList.update(d['todos']['list']);
 		},
-		todoList: function(callback){
+		todoListLoad: function(callback){
+			var __self = this;
 			this.ajax({
 				'do': 'todolist'
 			}, function(d){
+				__self._updateTodoList(d);
 				NS.life(callback);
 			});
+		},
+		todoSave: function(todoid, sd, callback){
+			var list = this.todoList, todo = null;
+			if (todoid > 0){
+				todo = list.get(todoid);
+			}
+			this.ajax({
+				'do': 'todosave',
+				'todoid': todoid,
+				'savedata': sd
+			}, function(d){
+				if (L.isValue(d) && L.isValue(d['todo'])){
+					if (L.isNull(todo)){
+						todo = new Todo(d['todo']);
+						list.add(todo);
+					}else{
+						todo.update(d['todo']);
+					}
+				}
+				NS.life(callback, todo);
+			});
+		},
+		todoListOrderSave: function(orders){
+			Brick.console(orders);
 		}
 	};
 	NS.manager = null;

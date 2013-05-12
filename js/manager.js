@@ -46,14 +46,15 @@ Component.entryPoint = function(NS){
 			
 			this.groupListWidget = new NS.GroupListWidget(this.gel('groplist'));
 			this.todoListWidget = new NS.TodoListWidget(this.gel('todolist'));
-		}
-		/*,
+		},
 		onClick: function(el, tp){
 			switch(el.id){
-			case tp['bbuild']: this.build(); return true;
+			case tp['baddtodo']: this.showNewTodoEditor(); return true;
 			}
 		},
-		build: function(){
+		showNewTodoEditor: function(){
+			this.todoListWidget.showNewEditor();
+			/*
 			this.elShow('bloading');
 			this.elHide('btns');
 			
@@ -62,7 +63,8 @@ Component.entryPoint = function(NS){
 				__self.elShow('btns');
 				__self.elHide('bloading');
 			});
-		}/**/
+			/**/
+		}
 	});
 	NS.ManagerWidget = ManagerWidget;
 };
