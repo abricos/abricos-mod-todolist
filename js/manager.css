@@ -4,6 +4,7 @@
 .aw-todolist .manager .brdtable .brdlcol {
 	width: 300px;
 	border-right: 1px solid #D1D3DC;
+	padding-right: 5px;
 }
 .aw-todolist .manager .brdtable .brdrcol {
 	padding-left: 5px;
@@ -13,4 +14,22 @@
 	padding-bottom: 10px;
 	margin-bottom: 10px;
 	text-align: right;
+}
+
+/* * * * Group List * * * */
+.aw-todolist .manager .brdcolhd {
+	position: relative;
+	background-color: #E8E9ED;
+	padding: 5px;
+}
+.aw-todolist .manager .brdcolhd span {
+	font-size: 13px;
+	font-weight: bold;
+	color: #3B4054;
+}
+
+.aw-todolist .manager .brdcolhd .boxbutton {
+	position: absolute;
+	right: 1px;
+	top: 1px;
 }

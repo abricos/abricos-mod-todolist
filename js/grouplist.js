@@ -5,9 +5,8 @@
 
 var Component = new Brick.Component();
 Component.requires = {
-	yahoo: ['animation', 'dragdrop'],
 	mod:[
-		{name: '{C#MODNAME}', files: ['groupeditor.js']}
+		{name: '{C#MODNAME}', files: ['dragdrop.js','groupeditor.js']}
 	]
 };
 Component.entryPoint = function(NS){
@@ -17,8 +16,6 @@ Component.entryPoint = function(NS){
 		L = YAHOO.lang,
 		buildTemplate = this.buildTemplate,
 		BW = Brick.mod.widget.Widget;
-	
-	var DDM = YAHOO.util.DragDropMgr; 
 	
 	var GroupListWidget = function(container, cfg){
 		cfg = L.merge({
@@ -61,14 +58,14 @@ Component.entryPoint = function(NS){
 			this.clearList();
 			
 			var elList = this.gel('list'), ws = this.wsList, 
-				__self = this, man = this.manager;
+				__self = this;
 			
-			NS.manager.groupList.foreach(function(catel){
+			NS.manager.groupList.foreach(function(group){
 				var div = document.createElement('div');
-				div['catalogGroup'] = catel;
-				
+				div['group'] = group;
+
 				elList.appendChild(div);
-				var w = new NS.GroupRowWidget(div, __self.manager, catel, {
+				var w = new NS.GroupRowWidget(div, group, {
 					'onEditClick': function(w){__self.onGroupEditClick(w);},
 					'onCopyClick': function(w){__self.onGroupCopyClick(w);},
 					'onRemoveClick': function(w){__self.onGroupRemoveClick(w);},
@@ -78,17 +75,17 @@ Component.entryPoint = function(NS){
 				
 				new NS.RowDragItem(div, {
 					'endDragCallback': function(dgi, elDiv){
-						var chs = elList.childNodes, ordb = list.count();
+						var chs = elList.childNodes, ordb = NS.manager.groupList.count();
 						var orders = {};
 						for (var i=0;i<chs.length;i++){
-							var catel = chs[i]['catalogGroup'];
-							if (catel){
-								catel.order = ordb;
-								orders[catel.id] = ordb;
+							var group = chs[i]['group'];
+							if (group){
+								group.order = ordb;
+								orders[group.id] = ordb;
 								ordb--;
 							}
 						}
-						man.groupListOrderSave(list.catid, orders);
+						NS.manager.groupListOrderSave(orders);
 						__self.render();
 					}
 				});
@@ -118,12 +115,12 @@ Component.entryPoint = function(NS){
 			w.editorShow();
 		},
 		onGroupCopyClick: function(w){
-			this.showNewEditor(w.catel);
+			this.showNewEditor(w.group);
 		},
 		onGroupRemoveClick: function(w){
 			var __self = this;
-			new GroupRemovePanel(this.manager, w.catel, function(list){
-				__self.list.remove(w.catel.id);
+			new GroupRemovePanel(w.group, function(list){
+				__self.list.remove(w.group.id);
 				__self.render();
 			});
 		},
@@ -135,12 +132,11 @@ Component.entryPoint = function(NS){
 			if (!L.isNull(this.newEditorWidget)){ return; }
 			
 			this.allEditorClose();
-			var man = this.manager, __self = this;
-			var catel = man.newGroup({'catid': this.list.catid});
+			var __self = this;
+			var group = new NS.Group();
 
 			this.newEditorWidget = 
-				new NS.GroupEditorWidget(this.gel('neweditor'), man, catel, {
-					'fromGroup': fel || null,
+				new NS.GroupEditorWidget(this.gel('neweditor'), group, {
 					'onCancelClick': function(wEditor){ __self.newEditorClose(); },
 					'onSaveGroup': function(wEditor, group){
 						if (!L.isNull(group)){
@@ -159,7 +155,7 @@ Component.entryPoint = function(NS){
 	});
 	NS.GroupListWidget = GroupListWidget;
 	
-	var GroupRowWidget = function(container, manager, catel, cfg){
+	var GroupRowWidget = function(container, group, cfg){
 		cfg = L.merge({
 			'onEditClick': null,
 			'onCopyClick': null,
@@ -169,22 +165,18 @@ Component.entryPoint = function(NS){
 		}, cfg || {});
 		GroupRowWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'row' 
-		}, manager, catel, cfg);
+		}, group, cfg);
 	};
 	YAHOO.extend(GroupRowWidget, BW, {
-		init: function(manager, catel, cfg){
-			this.manager = manager;
-			this.catel = catel;
+		init: function(group, cfg){
+			this.group = group;
 			this.cfg = cfg;
 			this.editorWidget = null;
 		},
-		onLoad: function(manager, catel){
+		onLoad: function(group){
 			this.elSetHTML({
-				'tl': catel.title
+				'tl': group.title
 			});
-			if (L.isNull(catel.url())){
-				this.elHide('bgopage');
-			}
 		},
 		onClick: function(el, tp){
 			switch(el.id){
@@ -207,7 +199,7 @@ Component.entryPoint = function(NS){
 			return false;
 		},
 		goPage: function(catid){
-			var url = this.catel.url();
+			var url = this.group.url();
 			window.open(url);
 		},
 		onEditClick: function(){
@@ -229,7 +221,7 @@ Component.entryPoint = function(NS){
 			if (!L.isNull(this.editorWidget)){ return; }
 			var __self = this;
 			this.editorWidget = 
-				new NS.GroupEditorWidget(this.gel('easyeditor'), this.manager, this.catel, {
+				new NS.GroupEditorWidget(this.gel('easyeditor'), this.group, {
 					'onCancelClick': function(wEditor){ __self.editorClose(); },
 					'onSaveGroup': function(wEditor){ 
 						__self.editorClose(); 
@@ -254,9 +246,8 @@ Component.entryPoint = function(NS){
 	});
 	NS.GroupRowWidget = GroupRowWidget;	
 
-	var GroupRemovePanel = function(manager, catel, callback){
-		this.manager = manager;
-		this.catel = catel;
+	var GroupRemovePanel = function(group, callback){
+		this.group = group;
 		this.callback = callback;
 		GroupRemovePanel.superclass.constructor.call(this, {fixedcenter: true});
 	};
@@ -277,7 +268,7 @@ Component.entryPoint = function(NS){
 				__self = this;
 			Dom.setStyle(gel('btns'), 'display', 'none');
 			Dom.setStyle(gel('bloading'), 'display', '');
-			this.manager.groupRemove(this.catel.id, function(){
+			NS.manager.groupRemove(this.group.id, function(){
 				__self.close();
 				NS.life(__self.callback);
 			});

@@ -50,20 +50,16 @@ Component.entryPoint = function(NS){
 		onClick: function(el, tp){
 			switch(el.id){
 			case tp['baddtodo']: this.showNewTodoEditor(); return true;
+			case tp['baddgroup']: 
+			case tp['baddgroupc']: 
+				this.showNewGroupEditor(); return true;
 			}
 		},
 		showNewTodoEditor: function(){
 			this.todoListWidget.showNewEditor();
-			/*
-			this.elShow('bloading');
-			this.elHide('btns');
-			
-			var __self = this;
-			NS.manager.build(function(){
-				__self.elShow('btns');
-				__self.elHide('bloading');
-			});
-			/**/
+		},
+		showNewGroupEditor: function(){
+			this.groupListWidget.showNewEditor();
 		}
 	});
 	NS.ManagerWidget = ManagerWidget;

@@ -130,6 +130,28 @@ Component.entryPoint = function(NS){
 				NS.life(callback);
 			});
 		},
+		groupSave: function(groupid, sd, callback){
+			var list = this.groupList, group = null;
+			if (groupid > 0){
+				group = list.get(groupid);
+			}
+			this.ajax({
+				'do': 'groupsave',
+				'groupid': groupid,
+				'savedata': sd
+			}, function(d){
+				if (L.isValue(d) && L.isValue(d['group'])){
+					if (L.isNull(group)){
+						group = new Group(d['group']);
+						list.add(group);
+					}else{
+						group.update(d['group']);
+					}
+				}
+				NS.life(callback, group);
+			});
+		},
+		
 		_updateTodoList: function(d){
 			if (!L.isValue(d) || !L.isValue(d['todos']) || !L.isValue(d['todos']['list'])){
 				return null;

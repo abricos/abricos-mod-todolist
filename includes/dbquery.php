@@ -8,18 +8,56 @@
 
 class TodoListQuery {
 	
+	public static $GroupFields = "
+		groupid as id,
+		parentgroupid as pid,
+		title as tl,
+		ord
+	";
+	
 	public static function GroupList(Ab_Database $db, $userid){
 		$sql = "
 			SELECT
-				groupid as id,
-				parentgroupid as pid,
-				title as tl,
-				ord
+				".TodoListQuery::$GroupFields."
 			FROM ".$db->prefix."todolist_group
 			WHERE userid=".bkint($userid)."
 		";
 		return $db->query_read($sql);
 	}
+	
+	public static function Group(Ab_Database $db, $userid, $groupid){
+		$sql = "
+			SELECT
+				".TodoListQuery::$GroupFields."
+			FROM ".$db->prefix."todolist_group
+			WHERE userid=".bkint($userid)." AND groupid=".bkint($groupid)." AND deldate=0
+			LIMIT 1
+		";
+		return $db->query_first($sql);
+	}
+	
+	public static function GroupAppend(Ab_Database $db, $userid, $sd){
+		$sql = "
+			INSERT INTO ".$db->prefix."todolist_group
+			(userid, title) VALUES (
+				".bkint($userid).",
+				'".bkstr($sd->tl)."'
+			)
+		";
+		$db->query_write($sql);
+		return $db->insert_id();
+	}
+	public static function GroupUpdate(Ab_Database $db, $userid, $groupid, $sd){
+		$sql = "
+			UPDATE ".$db->prefix."todolist_group
+			SET
+				title='".bkstr($sd->tl)."'
+			WHERE userid=".bkint($userid)." AND groupid=".bkint($groupid)."
+			LIMIT 1
+		";
+		$db->query_write($sql);
+	}
+	
 	
 	public static $TodoFields = "
 		todoid as id,

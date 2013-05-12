@@ -128,3 +128,60 @@
 	color: red;
 	margin-right: 10px;
 }
+
+
+/* * * Box Buttons * * */
+.aw-todolist .boxbutton {
+	border: 1px solid #dadada;
+	border-right: none;
+}
+.aw-todolist .boxbutton .b {
+	background-color: #fff;
+	cursor: pointer;
+	padding-left: 5px;
+	padding-top: 4px;
+	width: 18px;
+	height: 18px;
+	float: left;
+	border-right: 1px solid #dadada;
+}
+.aw-todolist .boxbutton .bm {
+	padding-left: 1px !important;
+	padding-top: 1px !important;
+}
+.aw-todolist .boxbutton .b:hover {
+	background-color: #FFF0C6; 
+}
+.aw-todolist .boxbutton .bc {
+	width: 12px;
+	height: 14px;
+}
+.aw-todolist .boxbutton .bgo {
+	background: url("/modules/todolist/images/icons.png") no-repeat scroll -20px -39px transparent;
+}
+.aw-todolist .boxbutton .border {
+	background: url("/modules/todolist/images/icons.png?b=0.1") no-repeat scroll -47px -38px transparent;
+	width: 16px;
+	height: 17px;
+}
+.aw-todolist .boxbutton .bgopage {
+	background: url("/modules/todolist/images/icons.png") no-repeat scroll -20px -39px transparent;
+}
+.aw-todolist .boxbutton .badd {
+	background: url("/modules/todolist/images/icons.png") no-repeat scroll -57px -24px transparent;
+}
+.aw-todolist .boxbutton .bedit {
+	background: url("/modules/todolist/images/icons.png") no-repeat scroll -29px -24px transparent;
+}
+.aw-todolist .boxbutton .bcp {
+	padding-left: 4px !important;
+	padding-top: 3px !important;
+}
+.aw-todolist .boxbutton .bcopy {
+	background: url("/modules/todolist/images/icons.png") no-repeat scroll -66px -39px transparent;
+	width: 14px;
+	height: 15px;
+}
+.aw-todolist .boxbutton .bremove {
+	background: url("/modules/todolist/images/icons.png") no-repeat scroll -42px -24px transparent;
+}

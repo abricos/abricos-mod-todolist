@@ -24,7 +24,7 @@ Component.entryPoint = function(NS){
 			'onSaveElement': null
 		}, cfg || {});
 		TodoEditorWidget.superclass.constructor.call(this, container, {
-			'buildTemplate': buildTemplate, 'tnames': 'widget,tpwidget,tplist,tprow,optnumber,nofoto' 
+			'buildTemplate': buildTemplate, 'tnames': 'widget' 
 		}, todo, cfg);
 	};
 	YAHOO.extend(TodoEditorWidget, BW, {

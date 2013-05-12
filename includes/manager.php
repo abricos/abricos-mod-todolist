@@ -54,6 +54,7 @@ class TodoListManager extends Ab_ModuleManager {
 		switch($d->do){
 			case "initdata": return $this->InitDataToAJAX();
 			case "grouplist": return $this->GroupListToAJAX();
+			case "groupsave": return $this->GroupSaveToAJAX($d->groupid, $d->savedata);
 			case "todolist": return $this->TodoListToAJAX();
 			case "todosave": return $this->TodoSaveToAJAX($d->todoid, $d->savedata);
 		}
@@ -97,6 +98,41 @@ class TodoListManager extends Ab_ModuleManager {
 		$ret->groups = $list->ToAJAX();
 		return $ret;
 	}
+	
+	public function GroupSave($groupid, $sd){
+		if (!$this->IsWriteRole()){ return null; }
+	
+		$groupid = intval($groupid);
+		$utm  = Abricos::TextParser(true);
+		$utm->jevix->cfgSetAutoBrMode(true);
+	
+		$sd->tl = $utm->Parser($sd->tl);
+	
+		if ($groupid == 0){
+			$groupid = TodoListQuery::GroupAppend($this->db, $this->userid, $sd);
+		}else{
+			TodoListQuery::GroupUpdate($this->db, $this->userid, $groupid, $sd);
+		}
+	
+		$d = TodoListQuery::Group($this->db, $this->userid, $groupid);
+		if (empty($d)){ return null; }
+	
+		return new TodoItem($d);
+	}
+	
+	public function GroupSaveToAJAX($groupid, $sd){
+		$group = $this->GroupSave($groupid, $sd);
+	
+		if (empty($group)){
+			return null;
+		}
+	
+		$ret = new stdClass();
+		$ret->group = $group->ToAJAX();
+	
+		return $ret;
+	}
+	
 	
 	/**
 	 * @return TodoList
