@@ -49,11 +49,6 @@ Component.entryPoint = function(NS){
 			}
 			this.elSetHTML('list', '');
 		},
-		setList: function(list){
-			this.list = list;
-			this.allEditorClose();
-			this.renderList();
-		},
 		renderList: function(){
 			this.clearList();
 			
@@ -104,9 +99,7 @@ Component.entryPoint = function(NS){
 		allEditorClose: function(wExclude){
 			this.newEditorClose();
 			this.foreach(function(w){
-				if (w != wExclude){
-					w.editorClose();
-				}
+				if (w != wExclude){ w.editorClose(); }
 			});
 		},
 		onGroupEditClick: function(w){

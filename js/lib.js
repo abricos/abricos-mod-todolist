@@ -70,13 +70,19 @@ Component.entryPoint = function(NS){
 	
 	var Todo = function(d){
 		d = L.merge({
-			'tl': ''
+			'tl': '',
+			'gid': 0,
+			'prtid': 0,
+			'lkid': 0
 		}, d || {});
 		Todo.superclass.constructor.call(this, d);
 	};
 	YAHOO.extend(Todo, SysNS.Item, {
 		update: function(d){
 			this.title = d['tl'];
+			this.groupid = d['gid']|0;
+			this.priorityid = d['prtid']|0;
+			this.likeid = d['lkid']|0;
 		}
 	});
 	NS.Todo = Todo;

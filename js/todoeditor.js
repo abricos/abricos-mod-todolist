@@ -7,7 +7,7 @@ var Component = new Brick.Component();
 Component.requires = {
 	mod:[
 		{name: 'sys', files: ['editor.js']},
-		{name: '{C#MODNAME}', files: ['lib.js']}
+		{name: '{C#MODNAME}', files: ['select.js', 'lib.js']}
 	]
 };
 Component.entryPoint = function(NS){
@@ -47,6 +47,10 @@ Component.entryPoint = function(NS){
 			this.elHide('loading');
 			this.elShow('view');
 			
+			this.groupSelectWidget = new NS.SelectWidget(this.gel('groupselect'), NS.manager.groupList, {
+				'value': todo.groupid
+			});
+			
 			this.elSetValue({
 				'tl': NS.textToEdit(todo.title)
 			});
@@ -76,7 +80,8 @@ Component.entryPoint = function(NS){
 			var cfg = this.cfg;
 			var todo = this.todo;
 			var sd = {
-				'tl': this.gel('tl').value
+				'tl': this.gel('tl').value,
+				'gid': this.groupSelectWidget.getValue()|0
 			};
 
 			this.elHide('btnsc');

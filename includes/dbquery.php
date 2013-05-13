@@ -36,22 +36,22 @@ class TodoListQuery {
 		return $db->query_first($sql);
 	}
 	
-	public static function GroupAppend(Ab_Database $db, $userid, $sd){
+	public static function GroupAppend(Ab_Database $db, $userid, $d){
 		$sql = "
 			INSERT INTO ".$db->prefix."todolist_group
 			(userid, title) VALUES (
 				".bkint($userid).",
-				'".bkstr($sd->tl)."'
+				'".bkstr($d->tl)."'
 			)
 		";
 		$db->query_write($sql);
 		return $db->insert_id();
 	}
-	public static function GroupUpdate(Ab_Database $db, $userid, $groupid, $sd){
+	public static function GroupUpdate(Ab_Database $db, $userid, $groupid, $d){
 		$sql = "
 			UPDATE ".$db->prefix."todolist_group
 			SET
-				title='".bkstr($sd->tl)."'
+				title='".bkstr($d->tl)."'
 			WHERE userid=".bkint($userid)." AND groupid=".bkint($groupid)."
 			LIMIT 1
 		";
@@ -88,22 +88,28 @@ class TodoListQuery {
 		return $db->query_first($sql);
 	}
 	
-	public static function TodoAppend(Ab_Database $db, $userid, $sd){
+	public static function TodoAppend(Ab_Database $db, $userid, $d){
 		$sql = "
 			INSERT INTO ".$db->prefix."todolist
-			(userid, title) VALUES (
+			(userid, title, groupid, priorityid, likeid) VALUES (
 				".bkint($userid).",
-				'".bkstr($sd->tl)."'
+				'".bkstr($d->tl)."',
+				".bkint($d->gid).",
+				".bkint($d->prtid).",
+				".bkint($d->lkid)."
 			)
 		";
 		$db->query_write($sql);
 		return $db->insert_id();
 	}
-	public static function TodoUpdate(Ab_Database $db, $userid, $todoid, $sd){
+	public static function TodoUpdate(Ab_Database $db, $userid, $todoid, $d){
 		$sql = "
 			UPDATE ".$db->prefix."todolist
 			SET
-				title='".bkstr($sd->tl)."'
+				title='".bkstr($d->tl)."',
+				groupid=".bkint($d->gid).",
+				priorityid=".bkint($d->prtid).",
+				likeid=".bkint($d->lkid)."
 			WHERE userid=".bkint($userid)." AND todoid=".bkint($todoid)."
 			LIMIT 1
 		";
