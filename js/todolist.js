@@ -66,11 +66,11 @@ Component.entryPoint = function(NS){
 
 				elList.appendChild(div);
 				var w = new NS.TodoRowWidget(div, todo, {
-					'onEditClick': function(w){__self.onGroupEditClick(w);},
-					'onCopyClick': function(w){__self.onGroupCopyClick(w);},
-					'onRemoveClick': function(w){__self.onGroupRemoveClick(w);},
-					'onSelectClick': function(w){__self.onGroupSelectClick(w);},
-					'onSaveGroup': function(w){ __self.render(); }
+					'onEditClick': function(w){__self.onTodoEditClick(w);},
+					'onCopyClick': function(w){__self.onTodoCopyClick(w);},
+					'onRemoveClick': function(w){__self.onTodoRemoveClick(w);},
+					'onSelectClick': function(w){__self.onTodoSelectClick(w);},
+					'onSave': function(w){ __self.render(); }
 				});
 				
 				new NS.RowDragItem(div, {
@@ -110,21 +110,21 @@ Component.entryPoint = function(NS){
 				}
 			});
 		},
-		onGroupEditClick: function(w){
+		onTodoEditClick: function(w){
 			this.allEditorClose(w);
 			w.editorShow();
 		},
-		onGroupCopyClick: function(w){
+		onTodoCopyClick: function(w){
 			this.showNewEditor(w.todo);
 		},
-		onGroupRemoveClick: function(w){
+		onTodoRemoveClick: function(w){
 			var __self = this;
 			new TodoRemovePanel(w.todo, function(list){
 				__self.list.remove(w.todo.id);
 				__self.render();
 			});
 		},
-		onGroupSelectClick: function(w){
+		onTodoSelectClick: function(w){
 			this.allEditorClose(w);
 			// w.editorShow();
 		},
@@ -138,7 +138,7 @@ Component.entryPoint = function(NS){
 			this.newEditorWidget = 
 				new NS.TodoEditorWidget(this.gel('neweditor'), todo, {
 					'onCancelClick': function(wEditor){ __self.newEditorClose(); },
-					'onSaveGroup': function(wEditor, group){
+					'onSave': function(wEditor, group){
 						if (!L.isNull(group)){
 							__self.list.add(group);
 						}
@@ -161,7 +161,7 @@ Component.entryPoint = function(NS){
 			'onCopyClick': null,
 			'onRemoveClick': null,
 			'onSelectClick': null,
-			'onSaveGroup': null
+			'onSave': null
 		}, cfg || {});
 		TodoRowWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'row' 
@@ -175,19 +175,13 @@ Component.entryPoint = function(NS){
 		},
 		onLoad: function(todo){
 			this.elSetHTML({
-				'tl': todo.title
+				'tl': NS.textToView(todo.title)
 			});
 		},
 		onClick: function(el, tp){
 			switch(el.id){
-			case tp['bgopage']: case tp['bgopagec']:
-				this.goPage();
-				return true;
 			case tp['bedit']: case tp['beditc']:
 				this.onEditClick();
-				return true;
-			case tp['bcopy']: case tp['bcopyc']:
-				this.onCopyClick();
 				return true;
 			case tp['bremove']: case tp['bremovec']:
 				this.onRemoveClick();
@@ -197,10 +191,6 @@ Component.entryPoint = function(NS){
 				return true;
 			}
 			return false;
-		},
-		goPage: function(catid){
-			var url = this.todo.url();
-			window.open(url);
 		},
 		onEditClick: function(){
 			NS.life(this.cfg['onEditClick'], this);
@@ -214,8 +204,8 @@ Component.entryPoint = function(NS){
 		onSelectClick: function(){
 			NS.life(this.cfg['onSelectClick'], this);
 		},
-		onSaveGroup: function(){
-			NS.life(this.cfg['onSaveGroup'], this);
+		onSave: function(){
+			NS.life(this.cfg['onSave'], this);
 		},
 		editorShow: function(){
 			if (!L.isNull(this.editorWidget)){ return; }
@@ -223,9 +213,9 @@ Component.entryPoint = function(NS){
 			this.editorWidget = 
 				new NS.TodoEditorWidget(this.gel('easyeditor'), this.todo, {
 					'onCancelClick': function(wEditor){ __self.editorClose(); },
-					'onSaveGroup': function(wEditor){ 
+					'onSave': function(wEditor){ 
 						__self.editorClose(); 
-						__self.onSaveGroup();
+						__self.onSave();
 					}
 				});
 			

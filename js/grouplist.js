@@ -52,7 +52,7 @@ Component.entryPoint = function(NS){
 		setList: function(list){
 			this.list = list;
 			this.allEditorClose();
-			this.render();
+			this.renderList();
 		},
 		renderList: function(){
 			this.clearList();
@@ -67,10 +67,9 @@ Component.entryPoint = function(NS){
 				elList.appendChild(div);
 				var w = new NS.GroupRowWidget(div, group, {
 					'onEditClick': function(w){__self.onGroupEditClick(w);},
-					'onCopyClick': function(w){__self.onGroupCopyClick(w);},
 					'onRemoveClick': function(w){__self.onGroupRemoveClick(w);},
 					'onSelectClick': function(w){__self.onGroupSelectClick(w);},
-					'onSaveGroup': function(w){ __self.render(); }
+					'onSave': function(w){ __self.renderList(); }
 				});
 				
 				new NS.RowDragItem(div, {
@@ -86,7 +85,7 @@ Component.entryPoint = function(NS){
 							}
 						}
 						NS.manager.groupListOrderSave(orders);
-						__self.render();
+						__self.renderList();
 					}
 				});
 		
@@ -114,14 +113,11 @@ Component.entryPoint = function(NS){
 			this.allEditorClose(w);
 			w.editorShow();
 		},
-		onGroupCopyClick: function(w){
-			this.showNewEditor(w.group);
-		},
 		onGroupRemoveClick: function(w){
 			var __self = this;
 			new GroupRemovePanel(w.group, function(list){
 				__self.list.remove(w.group.id);
-				__self.render();
+				__self.renderList();
 			});
 		},
 		onGroupSelectClick: function(w){
@@ -138,12 +134,9 @@ Component.entryPoint = function(NS){
 			this.newEditorWidget = 
 				new NS.GroupEditorWidget(this.gel('neweditor'), group, {
 					'onCancelClick': function(wEditor){ __self.newEditorClose(); },
-					'onSaveGroup': function(wEditor, group){
-						if (!L.isNull(group)){
-							__self.list.add(group);
-						}
+					'onSave': function(wEditor, group){
 						__self.newEditorClose(); 
-						__self.render();
+						__self.renderList();
 					}
 				});
 		},
@@ -161,7 +154,7 @@ Component.entryPoint = function(NS){
 			'onCopyClick': null,
 			'onRemoveClick': null,
 			'onSelectClick': null,
-			'onSaveGroup': null
+			'onSave': null
 		}, cfg || {});
 		GroupRowWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'row' 
@@ -180,14 +173,8 @@ Component.entryPoint = function(NS){
 		},
 		onClick: function(el, tp){
 			switch(el.id){
-			case tp['bgopage']: case tp['bgopagec']:
-				this.goPage();
-				return true;
 			case tp['bedit']: case tp['beditc']:
 				this.onEditClick();
-				return true;
-			case tp['bcopy']: case tp['bcopyc']:
-				this.onCopyClick();
 				return true;
 			case tp['bremove']: case tp['bremovec']:
 				this.onRemoveClick();
@@ -198,15 +185,8 @@ Component.entryPoint = function(NS){
 			}
 			return false;
 		},
-		goPage: function(catid){
-			var url = this.group.url();
-			window.open(url);
-		},
 		onEditClick: function(){
 			NS.life(this.cfg['onEditClick'], this);
-		},
-		onCopyClick: function(){
-			NS.life(this.cfg['onCopyClick'], this);
 		},
 		onRemoveClick: function(){
 			NS.life(this.cfg['onRemoveClick'], this);
@@ -214,8 +194,8 @@ Component.entryPoint = function(NS){
 		onSelectClick: function(){
 			NS.life(this.cfg['onSelectClick'], this);
 		},
-		onSaveGroup: function(){
-			NS.life(this.cfg['onSaveGroup'], this);
+		onSave: function(){
+			NS.life(this.cfg['onSave'], this);
 		},
 		editorShow: function(){
 			if (!L.isNull(this.editorWidget)){ return; }
@@ -223,9 +203,9 @@ Component.entryPoint = function(NS){
 			this.editorWidget = 
 				new NS.GroupEditorWidget(this.gel('easyeditor'), this.group, {
 					'onCancelClick': function(wEditor){ __self.editorClose(); },
-					'onSaveGroup': function(wEditor){ 
+					'onSave': function(wEditor){ 
 						__self.editorClose(); 
-						__self.onSaveGroup();
+						__self.onSave();
 					}
 				});
 			

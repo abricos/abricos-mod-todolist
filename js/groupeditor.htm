@@ -1,14 +1,14 @@
 <!--{widget}-->
-<div id="{i#id}" class="easyeditor todoeditor">
+<div id="{i#id}" class="easyeditor groupeditor">
 	<div id="{i#loading}">
 		<div id="{i#loading}" class="loading">
 			<img src="/images/loading.gif" />
 		</div>
 	</div>
-	<div id="{i#view}" class="editform" style="display: none">
+	<div id="{i#view}" class="editform" style="display: none" >
 		
 		<div class="r">
-			<textarea id="{i#tl}" class="title inp"></textarea>
+			<input id="{i#tl}" class="title inp" onfocus="this.select();"/>
 		</div>
 		
 		<div class="btns right r">

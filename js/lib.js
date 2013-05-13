@@ -30,7 +30,11 @@ Component.entryPoint = function(NS){
 	NS.textToEdit = function(s){
 		return s.replace(/<br\/>/gi, '');
 	};
-	
+
+	NS.textToView = function(s){
+		return s.replace(/<br\/>/gi, ' ');
+	};
+
 	var WS = "#app={C#MODNAMEURI}/wspace/ws/";
 	
 	NS.navigator = {

@@ -21,7 +21,7 @@ Component.entryPoint = function(NS){
 	var GroupEditorWidget = function(container, group, cfg){
 		cfg = L.merge({
 			'onCancelClick': null,
-			'onSaveElement': null
+			'onSave': null
 		}, cfg || {});
 		GroupEditorWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'widget' 
@@ -50,7 +50,13 @@ Component.entryPoint = function(NS){
 			this.elSetValue({
 				'tl': group.title
 			});
-			
+
+			var __self = this;
+			E.on(this.gel('id'), 'keypress', function(e){
+				if (e.keyCode != 13){ return false; }
+				__self.save(); return true; 
+			});
+
 			var elTitle = this.gel('tl');
 			setTimeout(function(){try{elTitle.focus();}catch(e){}}, 100);
 		},
@@ -78,7 +84,7 @@ Component.entryPoint = function(NS){
 			NS.manager.groupSave(group.id, sd, function(group){
 				__self.elShow('btnsc,btnscc');
 				__self.elHide('btnpc,btnpcc');
-				NS.life(cfg['onSaveElement'], __self, group);
+				NS.life(cfg['onSave'], __self, group);
 			}, group);
 		}
 	});

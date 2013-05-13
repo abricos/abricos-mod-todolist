@@ -21,7 +21,7 @@ Component.entryPoint = function(NS){
 	var TodoEditorWidget = function(container, todo, cfg){
 		cfg = L.merge({
 			'onCancelClick': null,
-			'onSaveElement': null
+			'onSave': null
 		}, cfg || {});
 		TodoEditorWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'widget' 
@@ -48,11 +48,19 @@ Component.entryPoint = function(NS){
 			this.elShow('view');
 			
 			this.elSetValue({
-				'tl': todo.title
+				'tl': NS.textToEdit(todo.title)
 			});
 			
 			var elTitle = this.gel('tl');
 			setTimeout(function(){try{elTitle.focus();}catch(e){}}, 100);
+			
+			var __self = this;
+			E.on(this.gel('id'), 'keypress', function(e){
+				if (e.keyCode == 13 && e.ctrlKey){ 
+					__self.save(); return true; 
+				}
+				return false;
+			});
 		},
 		onClick: function(el, tp){
 			switch(el.id){
@@ -78,7 +86,7 @@ Component.entryPoint = function(NS){
 			NS.manager.todoSave(todo.id, sd, function(todo){
 				__self.elShow('btnsc,btnscc');
 				__self.elHide('btnpc,btnpcc');
-				NS.life(cfg['onSaveElement'], __self, todo);
+				NS.life(cfg['onSave'], __self, todo);
 			}, todo);
 		}
 	});

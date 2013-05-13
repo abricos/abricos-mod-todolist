@@ -13,6 +13,14 @@
     position: relative;
     white-space: nowrap;
 }
+
+.aw-todolist .todolist .elrow .shadow {
+    background: url("/modules/botask/images/shadow.png") repeat-y scroll 0 0 transparent;
+    width: 16px;
+	height: 1.3em;
+    position: absolute;
+    right: 0; top: 0;
+}
 .aw-todolist .todolist .elrow .rborder {
 	border: 1px solid #D1D3DC;
 	border-radius: 5px;

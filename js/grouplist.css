@@ -1,11 +1,11 @@
-.aw-todolist .todolist .elrow {
+.aw-todolist .grouplist .elrow {
 	min-height: 22px;
 	position: relative;
 }
-.aw-todolist .todolist .elrow:hover {
+.aw-todolist .grouplist .elrow:hover {
 	background-color: #FFF0C6;
 }
-.aw-todolist .todolist .elrow .tl {
+.aw-todolist .grouplist .elrow .tl {
 	cursor: pointer;
     margin: 0 10px 0 5px;
     overflow: hidden;
@@ -13,21 +13,21 @@
     position: relative;
     white-space: nowrap;
 }
-.aw-todolist .todolist .elrow .rborder {
+.aw-todolist .grouplist .elrow .rborder {
 	border: 1px solid #D1D3DC;
 	border-radius: 5px;
 }
 
 /* * * Menu * * */
-.aw-todolist .todolist .elrow .elrmenu {
+.aw-todolist .grouplist .elrow .elrmenu {
 	position: absolute;
     display: none;
     right: 0px;
     top: -1px;
 }
-.aw-todolist .todolist .elrow:hover .elrmenu {
+.aw-todolist .grouplist .elrow:hover .elrmenu {
 	display: block;
 }
-.aw-todolist .todolist .elrow .itemline:hover .elrmenu {
+.aw-todolist .grouplist .elrow .itemline:hover .elrmenu {
 	display: block;
 }

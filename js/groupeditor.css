@@ -1,14 +1,15 @@
 /* * * Editor * * */
-.aw-todolist .todoeditor textarea.title {
+.aw-todolist .groupeditor input.title,
+.aw-todolist .groupeditor textarea.title {
 	width: 98%;
 	margin-bottom: 5px;
 }
 
-.aw-todolist .elrow .todoeditor {
+.aw-todolist .elrow .groupeditor {
 	margin: 5px;
 	padding: 0 5px;
 }
-.aw-todolist .todolist .neweditor .todoeditor {
+.aw-todolist .todolist .neweditor .groupeditor {
 	border: 1px solid #D1D3DC;
 	border-radius: 5px;
 	background-color: #FFF0C6;
