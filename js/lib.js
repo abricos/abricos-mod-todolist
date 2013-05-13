@@ -56,6 +56,10 @@ Component.entryPoint = function(NS){
 		Group.superclass.constructor.call(this, d);
 	};
 	YAHOO.extend(Group, SysNS.Item, {
+		init: function(d){
+			this.todoCount = 0;
+			Group.superclass.init.call(this, d);
+		},
 		update: function(d){
 			this.title = d['tl'];
 		}
@@ -161,12 +165,16 @@ Component.entryPoint = function(NS){
 				NS.life(callback, group);
 			});
 		},
+		groupListOrderSave: function(orders){
+			Brick.console(orders);
+		},
 		
 		_updateTodoList: function(d){
 			if (!L.isValue(d) || !L.isValue(d['todos']) || !L.isValue(d['todos']['list'])){
 				return null;
 			}
 			this.todoList.update(d['todos']['list']);
+			this._todoCountInGroupCalculate();
 		},
 		todoListLoad: function(callback){
 			var __self = this;
@@ -178,6 +186,7 @@ Component.entryPoint = function(NS){
 			});
 		},
 		todoSave: function(todoid, sd, callback){
+			var __self = this;
 			var list = this.todoList, todo = null;
 			if (todoid > 0){
 				todo = list.get(todoid);
@@ -191,6 +200,7 @@ Component.entryPoint = function(NS){
 					if (L.isNull(todo)){
 						todo = new Todo(d['todo']);
 						list.add(todo);
+						__self._todoCountInGroupCalculate();
 					}else{
 						todo.update(d['todo']);
 					}
@@ -200,6 +210,16 @@ Component.entryPoint = function(NS){
 		},
 		todoListOrderSave: function(orders){
 			Brick.console(orders);
+		},
+		_todoCountInGroupCalculate: function(){
+			var gs = {};
+			this.todoList.foreach(function(todo){
+				var gid = todo.groupid|0;
+				gs[gid] = (gs[gid]|0)+1;
+			});
+			this.groupList.foreach(function(group){
+				group.todoCount = gs[group.id]|0;
+			});
 		}
 	};
 	NS.manager = null;

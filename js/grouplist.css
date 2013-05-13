@@ -1,17 +1,25 @@
 .aw-todolist .grouplist .elrow {
-	min-height: 22px;
+	height: 31px;
 	position: relative;
+	border-bottom: 1px solid #DCDEE4;
+	cursor: pointer;
 }
 .aw-todolist .grouplist .elrow:hover {
 	background-color: #FFF0C6;
 }
-.aw-todolist .grouplist .elrow .tl {
-	cursor: pointer;
-    margin: 0 10px 0 5px;
+.aw-todolist .grouplist .elrow li {
+	float: left;
+	padding: 7px 0 5px 5px;
+}
+.aw-todolist .grouplist .elrow li.tl {
+	width: 256px;
     overflow: hidden;
-    padding: 3px; 
     position: relative;
     white-space: nowrap;
+}
+.aw-todolist .grouplist .elrow li.cnt {
+	width: 30px;
+	text-align: right;
 }
 .aw-todolist .grouplist .elrow .rborder {
 	border: 1px solid #D1D3DC;
@@ -22,8 +30,8 @@
 .aw-todolist .grouplist .elrow .elrmenu {
 	position: absolute;
     display: none;
-    right: 0px;
-    top: -1px;
+    right: 2px;
+    top: 4px;
 }
 .aw-todolist .grouplist .elrow:hover .elrmenu {
 	display: block;

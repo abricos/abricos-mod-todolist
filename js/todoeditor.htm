@@ -8,12 +8,26 @@
 	<div id="{i#view}" class="editform" style="display: none">
 		
 		<div class="r">
-			<textarea id="{i#tl}" class="title inp"></textarea>
+			<input id="{i#tl}" class="title inp" />
+
+			<dl class="descript">
+				<dt>Описание</dt>
+				<dd>
+					<textarea id="{i#dsc}" class="inp"></textarea>
+				</dd>
+			</dl>
 			
-			<dl>
+			<dl class="grp">
 				<dt>Раздел</dt>
 				<dd>
 					<div id="{i#groupselect}"></div>
+				</dd>
+			</dl>
+			
+			<dl>
+				<dt>Время на решение (минут)</dt>
+				<dd>
+					<input id="{i#tl}" class="inp" />
 				</dd>
 			</dl>
 		</div>

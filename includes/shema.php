@@ -76,21 +76,36 @@ if ($updateManager->isInstall()){
 			`groupid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Группа',
 			
 			`module` varchar(50) NOT NULL DEFAULT '' COMMENT 'Модуль инициатор',
-				
-			`title` TEXT NOT NULL,
-	
+
+			`title` varchar(250) NOT NULL DEFAULT '' COMMENT 'Модуль инициатор',
+			`descript` TEXT NOT NULL,
+			
 			`priorityid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Приоритет',
 			`likeid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Отношение',
 			
 			`exectime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Предположительное время выполнения в секундах',
 			
 			`ord` int(5) NOT NULL DEFAULT 0 COMMENT 'Сортировка',
-				
+			
+			`checked` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT 'Выполнено',
+			`checkdate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата/время выполнения',
+
 			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
 			`deldate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата удаления',
 	
 			PRIMARY KEY (`todoid`),
 			KEY (`userid`)
+		)".$charset
+	);
+	
+	$db->query_write("
+		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_userconfig (
+			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
+	
+			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания записи',
+			`lastview` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата посещения',
+			
+			UNIQUE KEY (`userid`)
 		)".$charset
 	);
 	

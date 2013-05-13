@@ -161,7 +161,8 @@ Component.entryPoint = function(NS){
 		},
 		onLoad: function(group){
 			this.elSetHTML({
-				'tl': group.title
+				'tl': group.title,
+				'cnt': group.todoCount
 			});
 		},
 		onClick: function(el, tp){
@@ -172,10 +173,10 @@ Component.entryPoint = function(NS){
 			case tp['bremove']: case tp['bremovec']:
 				this.onRemoveClick();
 				return true;
-			case tp['dtl']: case tp['tl']:
-				this.onSelectClick();
-				return true;
 			}
+			
+			this.onSelectClick();
+			
 			return false;
 		},
 		onEditClick: function(){

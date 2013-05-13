@@ -12,15 +12,15 @@
 .aw-todolist .manager .manbtns {
 	border-bottom: 1px solid #D1D3DC;
 	padding-bottom: 10px;
-	margin-bottom: 10px;
 	text-align: right;
 }
 
 /* * * * Group List * * * */
 .aw-todolist .manager .brdcolhd {
 	position: relative;
-	background-color: #E8E9ED;
 	padding: 5px;
+	background-color: #E8E9ED;
+	border: 1px solid #DCDEE4;	
 }
 .aw-todolist .manager .brdcolhd span {
 	font-size: 13px;
