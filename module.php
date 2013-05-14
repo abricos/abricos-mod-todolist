@@ -57,12 +57,12 @@ class TodoListPermission extends Ab_UserPermission {
 	public function TodoListPermission(TodoListModule $module){
 		
 		$defRoles = array(
-			new Ab_UserRole(TodoListAction::VIEW, Ab_UserGroup::GUEST),
 			new Ab_UserRole(TodoListAction::VIEW, Ab_UserGroup::REGISTERED),
 			new Ab_UserRole(TodoListAction::VIEW, Ab_UserGroup::ADMIN),
 
+			new Ab_UserRole(TodoListAction::WRITE, Ab_UserGroup::REGISTERED),
 			new Ab_UserRole(TodoListAction::WRITE, Ab_UserGroup::ADMIN),
-
+				
 			new Ab_UserRole(TodoListAction::ADMIN, Ab_UserGroup::ADMIN),
 		);
 		

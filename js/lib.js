@@ -74,6 +74,29 @@ Component.entryPoint = function(NS){
 	YAHOO.extend(DictList, SysNS.ItemList, {});
 	NS.DictList = DictList;
 	
+	var Priority = function(d){
+		d = L.merge({
+			'tl': ''
+		}, d || {});
+		Priority.superclass.constructor.call(this, d);
+	};
+	YAHOO.extend(Priority, SysNS.Item, {
+		init: function(d){
+			this.todoCount = 0;
+			Priority.superclass.init.call(this, d);
+		},
+		update: function(d){
+			this.title = d['tl'];
+		}
+	});
+	NS.Priority = Priority;
+	
+	var PriorityList = function(d){
+		PriorityList.superclass.constructor.call(this, d, Priority);
+	};
+	YAHOO.extend(PriorityList, SysNS.ItemList, {});
+	NS.PriorityList = PriorityList;
+	
 	
 	var Group = function(d){
 		d = L.merge({
@@ -137,6 +160,7 @@ Component.entryPoint = function(NS){
 		init: function(callback){
 			NS.manager = this;
 			
+			this.priorityList = new PriorityList();
 			this.groupList = new GroupList();
 			this.todoList = new TodoList();
 			
@@ -147,6 +171,7 @@ Component.entryPoint = function(NS){
 				__self.ajax({
 					'do': 'initdata'
 				}, function(d){
+					__self._updatePriorityList(d);
 					__self._updateGroupList(d);
 					__self._updateTodoList(d);
 					NS.life(callback, __self);
@@ -166,6 +191,45 @@ Component.entryPoint = function(NS){
 				}
 			});
 		},
+		
+		_updatePriorityList: function(d){
+			if (!L.isValue(d) || !L.isValue(d['priorities']) || !L.isValue(d['priorities']['list'])){
+				return null;
+			}
+			this.priorityList.update(d['priorities']['list']);
+		},
+		priorityListLoad: function(callback){
+			var __self = this;
+			this.ajax({
+				'do': 'prioritylist'
+			}, function(d){
+				__self._updatePriorityList(d);
+				NS.life(callback);
+			});
+		},
+		prioritySave: function(priorityid, sd, callback){
+			var list = this.priorityList, priority = null;
+			if (priorityid > 0){
+				priority = list.get(priorityid);
+			}
+			this.ajax({
+				'do': 'prioritysave',
+				'priorityid': priorityid,
+				'savedata': sd
+			}, function(d){
+				if (L.isValue(d) && L.isValue(d['priority'])){
+					if (L.isNull(priority)){
+						priority = new Priority(d['priority']);
+						list.add(priority);
+					}else{
+						priority.update(d['priority']);
+					}
+				}
+				NS.life(callback, priority);
+			});
+		},
+		
+		
 		_updateGroupList: function(d){
 			if (!L.isValue(d) || !L.isValue(d['groups']) || !L.isValue(d['groups']['list'])){
 				return null;

@@ -27,6 +27,18 @@ class TodoGroupList extends TodoList_ItemList { }
 
 
 class TodoPriority extends TodoList_Item {
+	public $title;
+	
+	public function __construct($d){
+		parent::__construct($d);
+		$this->title = strval($d['tl']);
+	}
+	
+	public function ToAJAX(){
+		$ret = parent::ToAJAX();
+		$ret->tl = $this->title;
+		return $ret;
+	}
 }
 
 class TodoPriorityList extends TodoList_ItemList { }
@@ -72,7 +84,17 @@ class TodoItem extends TodoList_Item {
 	}
 }
 
-class TodoList extends TodoList_ItemList {
+class TodoList extends TodoList_ItemList { }
+
+class TodoListUserConfig {
+	public function __construct($d){
+		
+	}
+	
+	public function ToAJAX(){
+		$ret = new stdClass();
+		return $ret;
+	}
 }
 
 class TodoListConfig {

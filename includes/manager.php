@@ -67,14 +67,109 @@ class TodoListManager extends Ab_ModuleManager {
 		
 		$ret = new stdClass();
 		
+		$obj = $this->UserConfig();
+		$ret->userconfig = $obj->userconfig;
+		
 		$obj = $this->GroupListToAJAX();
 		$ret->groups = $obj->groups;
+
+		$obj = $this->PriorityListToAJAX();
+		$ret->priorities = $obj->priorities;
 
 		$obj = $this->TodoListToAJAX();
 		$ret->todos = $obj->todos;
 		
 		return $ret;
 	}
+	
+	/**
+	 * @return TodoListUserConfig
+	 */
+	public function UserConfig(){
+		if (!$this->IsViewRole()){ return null; }
+		
+		$d = TodoListQuery::UserConfig($this->db, $this->userid);
+		if (empty($d)){
+			// пользователь первый раз запускает модуль, необходимо заполнить таблицы для него
+			TodoListQuery::UserConfigAppend($this->db, $this->userid);
+
+			$this->PrioritySave(0, $this->ParamToObject(array(
+				"tl" => "Срочно",
+				"ord" => 3
+			)));
+			$this->PrioritySave(0, $this->ParamToObject(array(
+				"tl" => "Нормально",
+				"ord" => 2,
+				"def" => 1
+			)));
+			$this->PrioritySave(0, $this->ParamToObject(array(
+				"tl" => "Не важно",
+				"ord" => 1
+			)));
+		}
+		
+		return new TodoListUserConfig($d);
+	}
+	
+	public function UserConfigToAJAX(){
+		$uconfig = $this->UserConfig();
+		if (empty($uconfig)){ return null; }
+		
+		$ret = new stdClass();
+		$ret->userconfig = $uconfig->ToAJAX();
+		return $ret;
+	}
+	
+	public function PriorityList(){
+		if (!$this->IsViewRole()){ return null; }
+		
+		$list = new TodoPriorityList();
+		$rows = TodoListQuery::PriorityList($this->db, $this->userid);
+		while (($d = $this->db->fetch_array($rows))){
+			$list->Add(new TodoPriority($d));
+		}
+		return $list;
+	}
+	
+	public function PriorityListToAJAX(){
+		$list = $this->PriorityList();
+		if (empty($list)){ return null; }
+	
+		$ret = new stdClass();
+		$ret->priorities = $list->ToAJAX();
+		return $ret;
+	}
+	
+	public function PrioritySave($priorityid, $sd){
+		if (!$this->IsWriteRole()){ return null; }
+	
+		$priorityid = intval($priorityid);
+		$utmf  = Abricos::TextParser(true);
+	
+		$sd->tl = $utmf->Parser($sd->tl);
+	
+		if ($priorityid == 0){
+			$priorityid = TodoListQuery::PriorityAppend($this->db, $this->userid, $sd);
+		}else{
+			TodoListQuery::PriorityUpdate($this->db, $this->userid, $priorityid, $sd);
+		}
+	
+		$d = TodoListQuery::Priority($this->db, $this->userid, $priorityid);
+		if (empty($d)){ return null; }
+	
+		return new TodoItem($d);
+	}
+	
+	public function PrioritySaveToAJAX($priorityid, $sd){
+		$priority = $this->PrioritySave($priorityid, $sd);
+	
+		if (empty($priority)){ return null; }
+	
+		$ret = new stdClass();
+		$ret->priority = $priority->ToAJAX();
+	
+		return $ret;
+	}	
 	
 	/**
 	 * @return TodoGroupList
@@ -103,10 +198,9 @@ class TodoListManager extends Ab_ModuleManager {
 		if (!$this->IsWriteRole()){ return null; }
 	
 		$groupid = intval($groupid);
-		$utm  = Abricos::TextParser(true);
-		$utm->jevix->cfgSetAutoBrMode(true);
+		$utmf  = Abricos::TextParser(true);
 		
-		$sd->tl = $utm->Parser($sd->tl);
+		$sd->tl = $utmf->Parser($sd->tl);
 		
 		if ($groupid == 0){
 			$groupid = TodoListQuery::GroupAppend($this->db, $this->userid, $sd);
@@ -195,6 +289,19 @@ class TodoListManager extends Ab_ModuleManager {
 		
 		return $ret;
 	}
+	
+	public function ParamToObject($o){
+		if (is_array($o)){
+			$ret = new stdClass();
+			foreach($o as $key => $value){
+				$ret->$key = $value;
+			}
+			return $ret;
+		}else if (!is_object($o)){
+			return new stdClass();
+		}
+		return $o;
+	}	
 
 	public function ToArray($rows, &$ids1 = "", $fnids1 = 'uid', &$ids2 = "", $fnids2 = '', &$ids3 = "", $fnids3 = ''){
 		$ret = array();
