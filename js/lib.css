@@ -112,6 +112,7 @@
 }
 .aw-todolist .editform select.inp {
 	width: 407px;
+	padding: 2px;
 }
 .aw-todolist .editform textarea.inp {
 	height: 100px;

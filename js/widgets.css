@@ -1,0 +1,10 @@
+.aw-todolist .timeinput li {
+	float: left;
+	margin-right: 5px;
+}
+.aw-todolist .timeinput input.inp {
+	width: 50px;
+}
+.aw-todolist .timeinput select.inp {
+	width: 100px;
+}

@@ -138,10 +138,7 @@ Component.entryPoint = function(NS){
 			this.newEditorWidget = 
 				new NS.TodoEditorWidget(this.gel('neweditor'), todo, {
 					'onCancelClick': function(wEditor){ __self.newEditorClose(); },
-					'onSave': function(wEditor, group){
-						if (!L.isNull(group)){
-							__self.list.add(group);
-						}
+					'onSave': function(wEditor, todo){
 						__self.newEditorClose(); 
 						__self.render();
 					}

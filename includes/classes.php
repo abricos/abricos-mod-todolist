@@ -42,6 +42,8 @@ class TodoItem extends TodoList_Item {
 	public $groupid;
 	public $priorityid;
 	public $likeid;
+	public $exectime;
+	public $date;
 	
 	public function __construct($d){
 		parent::__construct($d);
@@ -50,6 +52,8 @@ class TodoItem extends TodoList_Item {
 		$this->groupid = intval($d['gid']);
 		$this->priorityid = intval($d['prtid']);
 		$this->likeid = intval($d['lkid']);
+		$this->exectime = intval($d['etm']);
+		$this->date = intval($d['dl']);
 	}
 	
 	public function ToAJAX(){
@@ -58,6 +62,8 @@ class TodoItem extends TodoList_Item {
 		$ret->gid = $this->groupid;
 		$ret->prtid = $this->priorityid;
 		$ret->lkid = $this->likeid;
+		$ret->etm = $this->exectime;
+		$ret->dl = $this->date;
 		
 		return $ret;
 	}

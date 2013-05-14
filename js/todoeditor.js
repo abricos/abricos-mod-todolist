@@ -7,7 +7,7 @@ var Component = new Brick.Component();
 Component.requires = {
 	mod:[
 		{name: 'sys', files: ['editor.js']},
-		{name: '{C#MODNAME}', files: ['select.js', 'lib.js']}
+		{name: '{C#MODNAME}', files: ['widgets.js', 'lib.js']}
 	]
 };
 Component.entryPoint = function(NS){
@@ -50,6 +50,8 @@ Component.entryPoint = function(NS){
 			this.groupSelectWidget = new NS.SelectWidget(this.gel('groupselect'), NS.manager.groupList, {
 				'value': todo.groupid
 			});
+			
+			this.timeInputWidget = new NS.TimeInputWidget(this.gel('time'));
 			
 			this.elSetValue({
 				'tl': NS.textToEdit(todo.title)

@@ -34,6 +34,12 @@ Component.entryPoint = function(NS){
 	NS.textToView = function(s){
 		return s.replace(/<br\/>/gi, ' ');
 	};
+	
+	NS.TIMETYPE = {
+		'MINUTE': 1,
+		'HOUR': 2,
+		'DAY': 3
+	};
 
 	var WS = "#app={C#MODNAMEURI}/wspace/ws/";
 	
@@ -48,6 +54,26 @@ Component.entryPoint = function(NS){
 			Brick.Page.reload(url);
 		}
 	};
+	
+	var Dict = function(d){
+		d = L.merge({
+			'tl': ''
+		}, d || {});
+		Dict.superclass.constructor.call(this, d);
+	};
+	YAHOO.extend(Dict, SysNS.Item, {
+		update: function(d){
+			this.title = d['tl'];
+		}
+	});
+	NS.Dict = Dict;
+	
+	var DictList = function(d){
+		DictList.superclass.constructor.call(this, d, Dict);
+	};
+	YAHOO.extend(DictList, SysNS.ItemList, {});
+	NS.DictList = DictList;
+	
 	
 	var Group = function(d){
 		d = L.merge({
@@ -77,7 +103,9 @@ Component.entryPoint = function(NS){
 			'tl': '',
 			'gid': 0,
 			'prtid': 0,
-			'lkid': 0
+			'lkid': 0,
+			'etm': 0,
+			'dl': (new Date()).getTime()/1000
 		}, d || {});
 		Todo.superclass.constructor.call(this, d);
 	};
@@ -87,6 +115,8 @@ Component.entryPoint = function(NS){
 			this.groupid = d['gid']|0;
 			this.priorityid = d['prtid']|0;
 			this.likeid = d['lkid']|0;
+			this.exectime = d['etm']|0;
+			this.date = d['dl']|0;
 		}
 	});
 	NS.Todo = Todo;
