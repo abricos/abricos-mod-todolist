@@ -41,6 +41,7 @@ if ($updateManager->isInstall()){
 			`title` varchar(250) NOT NULL DEFAULT '' COMMENT 'Название',
 			`ord` int(2) unsigned NOT NULL DEFAULT 0 COMMENT 'Сортировка',
 			`isdefault` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT 'По умолчанию',
+			`color` varchar(50) NOT NULL DEFAULT '' COMMENT 'Цвет',
 			
 			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
 			`deldate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата удаления',

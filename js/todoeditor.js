@@ -50,7 +50,11 @@ Component.entryPoint = function(NS){
 			this.groupSelectWidget = new NS.SelectWidget(this.gel('groupselect'), NS.manager.groupList, {
 				'value': todo.groupid
 			});
-			
+
+			this.prioritySelectWidget = new NS.SelectWidget(this.gel('priorityselect'), NS.manager.priorityList, {
+				'value': todo.priorityid
+			});
+
 			this.timeInputWidget = new NS.TimeInputWidget(this.gel('time'), {
 				'value': todo.exectime
 			});
@@ -87,6 +91,7 @@ Component.entryPoint = function(NS){
 			var sd = {
 				'tl': this.gel('tl').value,
 				'dsc': this.gel('dsc').value,
+				'prtid': this.prioritySelectWidget.getValue()|0,
 				'gid': this.groupSelectWidget.getValue()|0,
 				'etm': this.timeInputWidget.getValue()
 			};

@@ -76,17 +76,17 @@ Component.entryPoint = function(NS){
 	
 	var Priority = function(d){
 		d = L.merge({
-			'tl': ''
+			'tl': '',
+			'def': 0,
+			'ord': 0
 		}, d || {});
 		Priority.superclass.constructor.call(this, d);
 	};
 	YAHOO.extend(Priority, SysNS.Item, {
-		init: function(d){
-			this.todoCount = 0;
-			Priority.superclass.init.call(this, d);
-		},
 		update: function(d){
 			this.title = d['tl'];
+			this.isDefault = (d['def']|0)>0;
+			this.order = d['ord']|0;
 		}
 	});
 	NS.Priority = Priority;
@@ -94,7 +94,18 @@ Component.entryPoint = function(NS){
 	var PriorityList = function(d){
 		PriorityList.superclass.constructor.call(this, d, Priority);
 	};
-	YAHOO.extend(PriorityList, SysNS.ItemList, {});
+	YAHOO.extend(PriorityList, SysNS.ItemList, {
+		getDefaultId: function(){
+			var defid = 0;
+			this.foreach(function(priotiry){
+				if (priotiry.isDefault){
+					defid = priotiry.id;
+					return true;
+				}
+			});
+			return defid;
+		}
+	});
 	NS.PriorityList = PriorityList;
 	
 	
@@ -128,6 +139,7 @@ Component.entryPoint = function(NS){
 			'gid': 0,
 			'prtid': 0,
 			'lkid': 0,
+			'ord': 0,
 			'etm': 0,
 			'dl': (new Date()).getTime()/1000
 		}, d || {});
@@ -140,6 +152,7 @@ Component.entryPoint = function(NS){
 			this.groupid = d['gid']|0;
 			this.priorityid = d['prtid']|0;
 			this.likeid = d['lkid']|0;
+			this.order = d['ord']|0;
 			this.exectime = d['etm']|0;
 			this.date = d['dl']|0;
 		}

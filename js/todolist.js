@@ -135,7 +135,8 @@ Component.entryPoint = function(NS){
 				groupid = this.filter['groupid']|0;
 			}
 			var todo = new NS.Todo({
-				'gid': groupid
+				'gid': groupid,
+				'prtid': NS.manager.priorityList.getDefaultId()
 			});
 
 			this.newEditorWidget = new NS.TodoEditorWidget(this.gel('neweditor'), todo, {
