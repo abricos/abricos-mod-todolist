@@ -109,6 +109,24 @@ if ($updateManager->isInstall()){
 			UNIQUE KEY (`userid`)
 		)".$charset
 	);
+
+	// планирование дел
+	$db->query_write("
+		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_plan (
+			`planid` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
+			
+			`day` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'День',
+			`todoid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дело',
+			`ord` int(5) NOT NULL DEFAULT 0 COMMENT 'Сортировка',
+			
+			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
+			`deldate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата удаления',
+	
+			PRIMARY KEY (`todoid`),
+			KEY (`userid`)
+		)".$charset
+	);
 	
 }
 
