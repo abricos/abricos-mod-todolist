@@ -35,13 +35,21 @@ Component.entryPoint = function(NS){
 		},
 		destroy: function(){
 			this.clearList();
+			NS.manager.todoListChangedEvent.unsubscribe(this.onTodoListChanged);
 			GroupListWidget.superclass.destroy.call(this);			
 		},
 		onLoad: function(){
 			var __self = this;
 			NS.initManager(function(){
-				__self.renderList();
+				__self._onLoadManager();
 			});
+		},
+		_onLoadManager: function(){
+			NS.manager.todoListChangedEvent.subscribe(this.onTodoListChanged, this, true);
+			this.renderList();
+		},
+		onTodoListChanged: function(){
+			this.render();
 		},
 		clearList: function(){
 			var ws = this.wsList;
@@ -96,6 +104,11 @@ Component.entryPoint = function(NS){
 			for (var i=0;i<ws.length;i++){
 				if (f(ws[i])){ return; }
 			}
+		},
+		render: function(){
+			this.foreach(function(w){
+				w.render();
+			});
 		},
 		allEditorClose: function(wExclude){
 			this.newEditorClose();
@@ -174,7 +187,8 @@ Component.entryPoint = function(NS){
 			this.cfg = cfg;
 			this.editorWidget = null;
 		},
-		onLoad: function(group){
+		render: function(){
+			var group = this.group;
 			this.elSetHTML({
 				'tl': group.title,
 				'cnt': group.todoCount

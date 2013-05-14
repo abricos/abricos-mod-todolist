@@ -140,6 +140,8 @@ Component.entryPoint = function(NS){
 			this.groupList = new GroupList();
 			this.todoList = new TodoList();
 			
+			this.todoListChangedEvent = new YAHOO.util.CustomEvent('todoListChangedEvent');
+			
 			var __self = this;
 			R.load(function(){
 				__self.ajax({
@@ -150,6 +152,9 @@ Component.entryPoint = function(NS){
 					NS.life(callback, __self);
 				});
 			});
+		},
+		onTodoListChanged: function(){
+			this.todoListChangedEvent.fire();
 		},
 		ajax: function(data, callback){
 			data = data || {};
@@ -232,10 +237,11 @@ Component.entryPoint = function(NS){
 					if (L.isNull(todo)){
 						todo = new Todo(d['todo']);
 						list.add(todo);
-						__self._todoCountInGroupCalculate();
 					}else{
 						todo.update(d['todo']);
 					}
+					__self._todoCountInGroupCalculate();
+					__self.onTodoListChanged();
 				}
 				NS.life(callback, todo);
 			});

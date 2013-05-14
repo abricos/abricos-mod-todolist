@@ -31,6 +31,7 @@ Component.entryPoint = function(NS){
 			this.wsList = [];
 			
 			this.newEditorWidget = null;
+			this.filter = null;
 		},
 		destroy: function(){
 			this.clearList();
@@ -86,7 +87,9 @@ Component.entryPoint = function(NS){
 				});
 		
 				ws[ws.length] = w;
+				w.hide();
 			}, 'order', true);
+			this.setFilter(this.filter);
 			
 			new YAHOO.util.DDTarget(elList);
 		},
@@ -121,23 +124,27 @@ Component.entryPoint = function(NS){
 		},
 		onTodoSelectClick: function(w){
 			this.allEditorClose(w);
-			// w.editorShow();
 		},
 		showNewEditor: function(fel){
 			if (!L.isNull(this.newEditorWidget)){ return; }
 			
 			this.allEditorClose();
 			var __self = this;
-			var todo = new NS.Todo();
+			var groupid = 0;
+			if (L.isObject(this.filter)){
+				groupid = this.filter['groupid']|0;
+			}
+			var todo = new NS.Todo({
+				'gid': groupid
+			});
 
-			this.newEditorWidget = 
-				new NS.TodoEditorWidget(this.gel('neweditor'), todo, {
-					'onCancelClick': function(wEditor){ __self.newEditorClose(); },
-					'onSave': function(wEditor, todo){
-						__self.newEditorClose(); 
-						__self.renderList();
-					}
-				});
+			this.newEditorWidget = new NS.TodoEditorWidget(this.gel('neweditor'), todo, {
+				'onCancelClick': function(wEditor){ __self.newEditorClose(); },
+				'onSave': function(wEditor, todo){
+					__self.newEditorClose(); 
+					__self.renderList();
+				}
+			});
 		},
 		newEditorClose: function(){
 			if (L.isNull(this.newEditorWidget)){ return; }
@@ -145,6 +152,7 @@ Component.entryPoint = function(NS){
 			this.newEditorWidget = null;
 		},
 		setFilter: function(filter){
+			this.filter = filter = filter || null;
 			var groupid = 0;
 			if (L.isObject(filter)){
 				groupid = filter['groupid']|0;
@@ -182,6 +190,14 @@ Component.entryPoint = function(NS){
 			this.elSetHTML({
 				'tl': NS.textToView(todo.title)
 			});
+			
+			var __self = this;
+			
+			E.on(this.gel('id'), 'dblclick', function(e){
+				__self.onEditClick();
+				return false;
+			});
+
 		},
 		onClick: function(el, tp){
 			switch(el.id){
