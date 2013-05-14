@@ -34,6 +34,7 @@ class TodoListQuery {
 	public static $PriorityFields = "
 		priorityid as id,
 		title as tl,
+		color as clr,
 		isdefault as def,
 		ord
 	";
@@ -62,9 +63,10 @@ class TodoListQuery {
 	public static function PriorityAppend(Ab_Database $db, $userid, $d){
 		$sql = "
 			INSERT INTO ".$db->prefix."todolist_priority
-			(userid, title, isdefault, ord, dateline) VALUES (
+			(userid, title, color, isdefault, ord, dateline) VALUES (
 				".bkint($userid).",
 				'".bkstr($d->tl)."',
+				'".bkstr($d->clr)."',
 				".(empty($d->def)?0:1).",
 				".bkint($d->ord).",
 				".TIMENOW."
@@ -79,6 +81,7 @@ class TodoListQuery {
 			UPDATE ".$db->prefix."todolist_priority
 			SET
 				title='".bkstr($d->tl)."',
+				color='".bkstr($d->clr)."',
 				isdefault=".(empty($d->def)?0:1).",
 				ord=".bkint($d->ord)."
 				WHERE userid=".bkint($userid)." AND priorityid=".bkint($priorityid)."

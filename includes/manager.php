@@ -94,17 +94,19 @@ class TodoListManager extends Ab_ModuleManager {
 			TodoListQuery::UserConfigAppend($this->db, $this->userid);
 
 			$this->PrioritySave(0, $this->ParamToObject(array(
-				"tl" => "Срочно",
-				"ord" => 3
+				"tl" => "Срочный",
+				"ord" => 3,
+				"clr" => "#974554"
 			)));
 			$this->PrioritySave(0, $this->ParamToObject(array(
-				"tl" => "Нормально",
+				"tl" => "Нормальный",
 				"ord" => 2,
 				"def" => 1
 			)));
 			$this->PrioritySave(0, $this->ParamToObject(array(
-				"tl" => "Не важно",
-				"ord" => 1
+				"tl" => "Не важный",
+				"ord" => 1,
+				"clr" => "#56975D"
 			)));
 		}
 		

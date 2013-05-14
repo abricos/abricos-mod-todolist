@@ -69,7 +69,7 @@ Component.entryPoint = function(NS){
 			
 			var __self = this;
 			E.on(this.gel('id'), 'keypress', function(e){
-				if (e.keyCode == 13 && e.ctrlKey){ 
+				if ((e.keyCode == 13 || e.keyCode == 10) && e.ctrlKey){ 
 					__self.save(); return true; 
 				}
 				return false;

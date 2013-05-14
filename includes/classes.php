@@ -28,12 +28,14 @@ class TodoGroupList extends TodoList_ItemList { }
 
 class TodoPriority extends TodoList_Item {
 	public $title;
+	public $color;
 	public $isdefault;
 	public $order;
 	
 	public function __construct($d){
 		parent::__construct($d);
 		$this->title = strval($d['tl']);
+		$this->color = strval($d['clr']);
 		$this->isdefault = $d['def']>0;
 		$this->order = intval($d['ord']);
 	}
@@ -41,6 +43,7 @@ class TodoPriority extends TodoList_Item {
 	public function ToAJAX(){
 		$ret = parent::ToAJAX();
 		$ret->tl = $this->title;
+		$ret->clr = $this->color;
 		$ret->def = $this->isdefault;
 		$ret->ord = $this->order;
 		return $ret;

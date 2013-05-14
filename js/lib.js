@@ -78,13 +78,15 @@ Component.entryPoint = function(NS){
 		d = L.merge({
 			'tl': '',
 			'def': 0,
-			'ord': 0
+			'ord': 0,
+			'clr': ''
 		}, d || {});
 		Priority.superclass.constructor.call(this, d);
 	};
 	YAHOO.extend(Priority, SysNS.Item, {
 		update: function(d){
 			this.title = d['tl'];
+			this.color = d['clr'];
 			this.isDefault = (d['def']|0)>0;
 			this.order = d['ord']|0;
 		}
@@ -107,7 +109,6 @@ Component.entryPoint = function(NS){
 		}
 	});
 	NS.PriorityList = PriorityList;
-	
 	
 	var Group = function(d){
 		d = L.merge({
@@ -155,6 +156,9 @@ Component.entryPoint = function(NS){
 			this.order = d['ord']|0;
 			this.exectime = d['etm']|0;
 			this.date = d['dl']|0;
+		},
+		getPriority: function(){
+			return NS.manager.priorityList.get(this.priorityid);
 		}
 	});
 	NS.Todo = Todo;

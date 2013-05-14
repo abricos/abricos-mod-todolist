@@ -198,7 +198,11 @@ Component.entryPoint = function(NS){
 				__self.onEditClick();
 				return false;
 			});
-
+			
+			var priority = todo.getPriority();
+			if (L.isValue(priority) && priority.color.length > 0){
+				Dom.setStyle(this.gel('id'), 'color', priority.color);
+			}
 		},
 		onClick: function(el, tp){
 			switch(el.id){
