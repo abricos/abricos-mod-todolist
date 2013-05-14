@@ -163,10 +163,25 @@ Component.entryPoint = function(NS){
 	});
 	NS.Todo = Todo;
 	
-	var TodoList = function(d){
-		TodoList.superclass.constructor.call(this, d, Todo);
+	var todoListOrder = function(t1, t2){
+		var p1 = t1.getPriority(),
+			p2 = t2.getPriority();
+		var o1 = L.isValue(p1) ? p1.order : 0,
+			o2 = L.isValue(p2) ? p2.order : 0;
+		
+		if (o1 > o2){ return -1; }
+		if (o1 < o2){ return 1; }
+		return 0;
 	};
-	YAHOO.extend(TodoList, SysNS.ItemList, {});
+	
+	var TodoList = function(d){
+		TodoList.superclass.constructor.call(this, d, Todo, {
+			'order': todoListOrder
+		});
+	};
+	YAHOO.extend(TodoList, SysNS.ItemList, {
+		
+	});
 	NS.TodoList = TodoList;
 	
 	

@@ -199,10 +199,13 @@ Component.entryPoint = function(NS){
 				return false;
 			});
 			
-			var priority = todo.getPriority();
-			if (L.isValue(priority) && priority.color.length > 0){
-				Dom.setStyle(this.gel('id'), 'color', priority.color);
+			var priority = todo.getPriority(), color = "";
+			if (!L.isValue(priority)){
+				color = "#3B4054";
+			}else if (priority.color.length > 0){
+				color = priority.color;
 			}
+			Dom.setStyle(this.gel('id'), 'color', color);
 		},
 		onClick: function(el, tp){
 			switch(el.id){
