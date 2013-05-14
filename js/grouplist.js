@@ -19,6 +19,7 @@ Component.entryPoint = function(NS){
 	
 	var GroupListWidget = function(container, cfg){
 		cfg = L.merge({
+			'onSelectedItem': null
 		}, cfg || {});
 		
 		GroupListWidget.superclass.constructor.call(this, container, {
@@ -27,7 +28,7 @@ Component.entryPoint = function(NS){
 	};
 	YAHOO.extend(GroupListWidget, BW, {
 		init: function(cfg){
-			this.config = cfg;
+			this.cfg = cfg;
 			this.wsList = [];
 			
 			this.newEditorWidget = null;
@@ -115,7 +116,21 @@ Component.entryPoint = function(NS){
 		},
 		onGroupSelectClick: function(w){
 			this.allEditorClose(w);
-			// w.editorShow();
+			var groupid = 0;
+			if (L.isValue(w)){
+				groupid = w.group.id;
+			}
+			this.selectGroupById(groupid);
+			NS.life(this.cfg['onSelectedItem'], groupid);
+		},
+		selectGroupById: function(groupid){
+			this.foreach(function(w){
+				if (w.group.id == groupid){
+					w.select();
+				}else{
+					w.unSelect();
+				}
+			});
 		},
 		showNewEditor: function(fel){
 			if (!L.isNull(this.newEditorWidget)){ return; }
@@ -216,6 +231,15 @@ Component.entryPoint = function(NS){
 
 			this.editorWidget.destroy();
 			this.editorWidget = null;
+		},
+		select: function(){
+			Dom.addClass(this.gel('wrap'), 'select');
+		},
+		unSelect: function(){
+			Dom.removeClass(this.gel('wrap'), 'select');
+		},
+		isSelect: function(){
+			return Dom.hasClass(this.gel('wrap'), 'select');
 		}
 	});
 	NS.GroupRowWidget = GroupRowWidget;	

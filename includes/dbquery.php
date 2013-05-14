@@ -65,6 +65,7 @@ class TodoListQuery {
 		priorityid as prtid,
 		likeid as lkid,
 		title as tl,
+		descript as dsc,
 		exectime as etm,
 		ord,
 		dateline as dl
@@ -93,9 +94,10 @@ class TodoListQuery {
 	public static function TodoAppend(Ab_Database $db, $userid, $d){
 		$sql = "
 			INSERT INTO ".$db->prefix."todolist
-			(userid, title, groupid, priorityid, likeid, exectime, dateline) VALUES (
+			(userid, title, descript, groupid, priorityid, likeid, exectime, dateline) VALUES (
 				".bkint($userid).",
 				'".bkstr($d->tl)."',
+				'".bkstr($d->dsc)."',
 				".bkint($d->gid).",
 				".bkint($d->prtid).",
 				".bkint($d->lkid).",
@@ -111,6 +113,7 @@ class TodoListQuery {
 			UPDATE ".$db->prefix."todolist
 			SET
 				title='".bkstr($d->tl)."',
+				descript='".bkstr($d->dsc)."',
 				groupid=".bkint($d->gid).",
 				priorityid=".bkint($d->prtid).",
 				likeid=".bkint($d->lkid).",

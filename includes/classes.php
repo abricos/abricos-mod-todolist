@@ -39,6 +39,7 @@ class TodoLikeList extends TodoList_ItemList { }
 class TodoItem extends TodoList_Item {
 	
 	public $title;
+	public $descript;
 	public $groupid;
 	public $priorityid;
 	public $likeid;
@@ -49,6 +50,7 @@ class TodoItem extends TodoList_Item {
 		parent::__construct($d);
 		
 		$this->title = strval($d['tl']);
+		$this->descript = strval($d['dsc']);
 		$this->groupid = intval($d['gid']);
 		$this->priorityid = intval($d['prtid']);
 		$this->likeid = intval($d['lkid']);
@@ -59,6 +61,7 @@ class TodoItem extends TodoList_Item {
 	public function ToAJAX(){
 		$ret = parent::ToAJAX();
 		$ret->tl = $this->title;
+		$ret->dsc = $this->descript;
 		$ret->gid = $this->groupid;
 		$ret->prtid = $this->priorityid;
 		$ret->lkid = $this->likeid;

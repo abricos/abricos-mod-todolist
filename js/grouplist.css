@@ -4,6 +4,9 @@
 	border-bottom: 1px solid #DCDEE4;
 	cursor: pointer;
 }
+.aw-todolist .grouplist .elrow .select {
+	font-weight: bold;
+}
 .aw-todolist .grouplist .elrow:hover {
 	background-color: #FFF0C6;
 }

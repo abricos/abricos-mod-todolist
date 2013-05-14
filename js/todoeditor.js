@@ -51,10 +51,13 @@ Component.entryPoint = function(NS){
 				'value': todo.groupid
 			});
 			
-			this.timeInputWidget = new NS.TimeInputWidget(this.gel('time'));
+			this.timeInputWidget = new NS.TimeInputWidget(this.gel('time'), {
+				'value': todo.exectime
+			});
 			
 			this.elSetValue({
-				'tl': NS.textToEdit(todo.title)
+				'tl': todo.title,
+				'dsc': NS.textToEdit(todo.descript)
 			});
 			
 			var elTitle = this.gel('tl');
@@ -83,9 +86,11 @@ Component.entryPoint = function(NS){
 			var todo = this.todo;
 			var sd = {
 				'tl': this.gel('tl').value,
-				'gid': this.groupSelectWidget.getValue()|0
+				'dsc': this.gel('dsc').value,
+				'gid': this.groupSelectWidget.getValue()|0,
+				'etm': this.timeInputWidget.getValue()
 			};
-
+			
 			this.elHide('btnsc');
 			this.elShow('btnpc');
 

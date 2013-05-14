@@ -43,8 +43,15 @@ Component.entryPoint = function(NS){
 		_onLoadManager: function(){
 			this.elHide('loading');
 			this.elShow('view');
+			var __self = this;
 			
-			this.groupListWidget = new NS.GroupListWidget(this.gel('groplist'));
+			this.groupListWidget = new NS.GroupListWidget(this.gel('groplist'), {
+				'onSelectedItem': function(groupid){
+					__self.setFilter({
+						'groupid': groupid
+					});
+				}
+			});
 			this.todoListWidget = new NS.TodoListWidget(this.gel('todolist'));
 		},
 		onClick: function(el, tp){
@@ -53,6 +60,9 @@ Component.entryPoint = function(NS){
 			case tp['baddgroup']: 
 			case tp['baddgroupc']: 
 				this.showNewGroupEditor(); return true;
+			case tp['bclearfilter']:
+				this.setFilter(null);
+				break;
 			}
 		},
 		showNewTodoEditor: function(){
@@ -60,6 +70,16 @@ Component.entryPoint = function(NS){
 		},
 		showNewGroupEditor: function(){
 			this.groupListWidget.showNewEditor();
+		},
+		setFilter: function(filter){
+			filter = filter || null;
+			this.todoListWidget.setFilter(filter);
+			if (L.isObject(filter)){
+				this.elShow('bclearfilter');
+			}else{
+				this.elHide('bclearfilter');
+				this.groupListWidget.selectGroupById(0);
+			}
 		}
 	});
 	NS.ManagerWidget = ManagerWidget;

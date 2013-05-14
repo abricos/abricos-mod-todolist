@@ -49,11 +49,6 @@ Component.entryPoint = function(NS){
 			}
 			this.elSetHTML('list', '');
 		},
-		setList: function(list){
-			this.list = list;
-			this.allEditorClose();
-			this.render();
-		},
 		renderList: function(){
 			this.clearList();
 			
@@ -70,7 +65,7 @@ Component.entryPoint = function(NS){
 					'onCopyClick': function(w){__self.onTodoCopyClick(w);},
 					'onRemoveClick': function(w){__self.onTodoRemoveClick(w);},
 					'onSelectClick': function(w){__self.onTodoSelectClick(w);},
-					'onSave': function(w){ __self.render(); }
+					'onSave': function(w){ __self.renderList(); }
 				});
 				
 				new NS.RowDragItem(div, {
@@ -86,7 +81,7 @@ Component.entryPoint = function(NS){
 							}
 						}
 						NS.manager.todoListOrderSave(orders);
-						__self.render();
+						__self.renderList();
 					}
 				});
 		
@@ -121,7 +116,7 @@ Component.entryPoint = function(NS){
 			var __self = this;
 			new TodoRemovePanel(w.todo, function(list){
 				__self.list.remove(w.todo.id);
-				__self.render();
+				__self.renderList();
 			});
 		},
 		onTodoSelectClick: function(w){
@@ -140,7 +135,7 @@ Component.entryPoint = function(NS){
 					'onCancelClick': function(wEditor){ __self.newEditorClose(); },
 					'onSave': function(wEditor, todo){
 						__self.newEditorClose(); 
-						__self.render();
+						__self.renderList();
 					}
 				});
 		},
@@ -148,6 +143,19 @@ Component.entryPoint = function(NS){
 			if (L.isNull(this.newEditorWidget)){ return; }
 			this.newEditorWidget.destroy();
 			this.newEditorWidget = null;
+		},
+		setFilter: function(filter){
+			var groupid = 0;
+			if (L.isObject(filter)){
+				groupid = filter['groupid']|0;
+			}
+			this.foreach(function(w){
+				if (groupid > 0 && w.todo.groupid != groupid){
+					w.hide();
+				}else{
+					w.show();
+				}
+			});
 		}
 	});
 	NS.TodoListWidget = TodoListWidget;
@@ -183,17 +191,11 @@ Component.entryPoint = function(NS){
 			case tp['bremove']: case tp['bremovec']:
 				this.onRemoveClick();
 				return true;
-			case tp['dtl']: case tp['tl']:
-				this.onSelectClick();
-				return true;
 			}
 			return false;
 		},
 		onEditClick: function(){
 			NS.life(this.cfg['onEditClick'], this);
-		},
-		onCopyClick: function(){
-			NS.life(this.cfg['onCopyClick'], this);
 		},
 		onRemoveClick: function(){
 			NS.life(this.cfg['onRemoveClick'], this);
@@ -229,6 +231,12 @@ Component.entryPoint = function(NS){
 
 			this.editorWidget.destroy();
 			this.editorWidget = null;
+		},
+		hide: function(){
+			Dom.addClass(this.gel('id'), 'hide');
+		},
+		show: function(){
+			Dom.removeClass(this.gel('id'), 'hide');
 		}
 	});
 	NS.TodoRowWidget = TodoRowWidget;	

@@ -1,5 +1,4 @@
 .aw-todolist .todolist .elrow {
-	height: 29px;
 	position: relative;
 	border-bottom: 1px solid #DCDEE4;
 	cursor: pointer;
@@ -9,26 +8,29 @@
 	background-color: #FFF0C6;
 }
 
-.aw-todolist .todolist .elrow li {
+.aw-todolist .todolist .elrow ul.tline li {
 	float: left;
 	padding: 7px 0 5px 5px;
 }
-.aw-todolist .todolist .elrow li.chk {
+.aw-todolist .todolist .elrow ul.tline li.chk {
 	padding-top: 9px;
 	width: 14px;
 }
-.aw-todolist .todolist .elrow li.tl {
+.aw-todolist .todolist .elrow ul.tline li.tl {
 	width: 680px;
     overflow: hidden;
     position: relative;
     white-space: nowrap;
 }
 .aw-todolist .todolist .elrow .shadow {
-    background: url("/modules/botask/images/shadow.png") repeat-y scroll 0 0 transparent;
+    background: url("/modules/todolist/images/shadow.png") repeat-y scroll 0 0 transparent;
     width: 16px;
 	height: 1.3em;
     position: absolute;
     right: 0; top: 3px;
+}
+.aw-todolist .todolist .elrow:hover .shadow {
+    background: url("/modules/todolist/images/shadow-row.png") repeat-y scroll 0 0 transparent;
 }
 .aw-todolist .todolist .elrow .rborder {
 	border: 1px solid #D1D3DC;

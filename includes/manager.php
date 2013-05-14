@@ -105,9 +105,9 @@ class TodoListManager extends Ab_ModuleManager {
 		$groupid = intval($groupid);
 		$utm  = Abricos::TextParser(true);
 		$utm->jevix->cfgSetAutoBrMode(true);
-	
+		
 		$sd->tl = $utm->Parser($sd->tl);
-	
+		
 		if ($groupid == 0){
 			$groupid = TodoListQuery::GroupAppend($this->db, $this->userid, $sd);
 		}else{
@@ -168,8 +168,10 @@ class TodoListManager extends Ab_ModuleManager {
 		$todoid = intval($todoid);
 		$utm  = Abricos::TextParser(true);
 		$utm->jevix->cfgSetAutoBrMode(true);
+		$utmf  = Abricos::TextParser(true);
 		
-		$sd->tl = $utm->Parser($sd->tl);
+		$sd->tl = $utmf->Parser($sd->tl);
+		$sd->dsc = $utm->Parser($sd->dsc);
 		
 		if ($todoid == 0){
 			$todoid = TodoListQuery::TodoAppend($this->db, $this->userid, $sd);

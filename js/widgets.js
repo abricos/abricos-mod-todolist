@@ -95,24 +95,26 @@ Component.entryPoint = function(NS){
 			this.setValue(cfg['value']|0);
 		},
 		getValue: function(){
-			var sec = this.gel('input').value|0,
-				ttime = this.timeTypeWidget.getValue();
-			
-			switch(ttime){
-			case NS.TIMETYPE.MINUTE: sec = sec*60; break;
-			case NS.TIMETYPE.HOUR: sec = sec*60*60; break;
-			case NS.TIMETYPE.DAY: sec = sec*60*60*24; break;
+			var sec = this.gel('input').value|0;
+			var TTYPE = NS.TIMETYPE;
+			switch(this.timeTypeWidget.getValue()|0){
+			case TTYPE['MINUTE']:	sec = sec*60; break;
+			case TTYPE['HOUR']:		sec = sec*60*60; break;
+			case TTYPE['DAY']:		sec = sec*60*60*24; break;
 			}
 			return sec;
 		},
 		setValue: function(value){
 			value = value|0;
 			var m = 60, h = 60*m, d = 24*h, ttime = 1;
-			
-			if (Math.round(value/d)*d == value){
+			if (value == 0){
+				ttime = 1;
+			}else if (Math.round(value/d)*d == value){
 				ttime = NS.TIMETYPE.DAY;
+				value = value/d;
 			}else if (Math.round(value/h)*h == value){
 				ttime = NS.TIMETYPE.HOUR;
+				value = value/h;
 			}
 			this.timeTypeWidget.setValue(ttime);
 			this.gel('input').value = value;
