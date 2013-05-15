@@ -8,19 +8,29 @@
 	background-color: #FFF0C6;
 }
 
+/*
 .aw-todolist .todolist .elrow ul.tline li {
 	float: left;
 	padding: 7px 0 5px 5px;
 }
-.aw-todolist .todolist .elrow ul.tline li.chk {
-	padding-top: 9px;
+/**/
+.aw-todolist .todolist .elrow table.tline {
+	width: 100%;
+}
+
+.aw-todolist .todolist .elrow .tline td.chk {
+	padding: 8px 0 7px 5px;
 	width: 14px;
 }
-.aw-todolist .todolist .elrow ul.tline li.tl {
-	width: 680px;
-    overflow: hidden;
-    position: relative;
+.aw-todolist .todolist .elrow .tline td.tl {
+	padding: 5px 0 7px 4px;
+}
+.aw-todolist .todolist .elrow .tline td.tl .tln {
+	width: 715px;
+	height: 18px;
+	position: relative;
     white-space: nowrap;
+    overflow: hidden;
 }
 .aw-todolist .todolist .elrow .executed {
 	font-style: italic;

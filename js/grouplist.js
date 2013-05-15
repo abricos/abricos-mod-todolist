@@ -129,15 +129,14 @@ Component.entryPoint = function(NS){
 			});
 		},
 		onGroupSelectClick: function(w){
-			this.allEditorClose(w);
 			var groupid = 0;
 			if (L.isValue(w)){
 				groupid = w.group.id;
 			}
 			this.selectGroupById(groupid);
-			NS.life(this.cfg['onSelectedItem'], groupid);
 		},
 		selectGroupById: function(groupid){
+			this.allEditorClose();
 			this.foreach(function(w){
 				if (w.group.id == groupid){
 					w.select();
@@ -145,6 +144,7 @@ Component.entryPoint = function(NS){
 					w.unSelect();
 				}
 			});
+			NS.life(this.cfg['onSelectedItem'], groupid);
 		},
 		showNewEditor: function(fel){
 			if (!L.isNull(this.newEditorWidget)){ return; }
@@ -159,6 +159,7 @@ Component.entryPoint = function(NS){
 					'onSave': function(wEditor, group){
 						__self.newEditorClose(); 
 						__self.renderList();
+						__self.selectGroupById(group.id);
 					}
 				});
 		},

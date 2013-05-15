@@ -9,15 +9,17 @@
 <!--{row}-->
 <div id="{i#id}" class="elrow">
 	<div id="{i#wrap}">
-		<ul class="tline" id="{i#tline}">
-			<li class="chk">
+		<table class="tline" id="{i#tline}"><tbody><tr>
+			<td class="chk">
 				<input id="{i#chk}" type="checkbox" />
-			</li>
-			<li class="tl">
-				<div id="{i#tl}" class="vl"></div>
-				<div class="shadow"></div>
-			</li>
-		</ul>
+			</td>
+			<td class="tl">
+				<div class="tln">
+					<div id="{i#tl}" class="vl"></div>
+					<div class="shadow"></div>
+				</div>
+			</td>
+		</tr></tbody></table>
 		<div class="clear"></div>
 		
 		<div id="{i#menu}" class="boxbutton elrmenu">
@@ -38,10 +40,10 @@
 
 <!--{removepanel}-->
 <div class='hd'>Удаление</div>
-<div class='bd aw-company'>
+<div class='bd aw-todolist'>
 	<div id="{i#dialogremove}" class="field">
 		<p>
-			Вы действительно хотите удалить элемент со всем его содержимым?
+			Вы действительно хотите удалить дело со всем его содержимым?
 		</p>
 		<div class="buttons right">
 			<span id="{i#btns}">

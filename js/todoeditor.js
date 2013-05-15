@@ -74,6 +74,12 @@ Component.entryPoint = function(NS){
 				}
 				return false;
 			});
+			E.on(this.gel('tl'), 'keypress', function(e){
+				if (e.keyCode == 13 || e.keyCode == 10){ 
+					__self.save(); return true; 
+				}
+				return false;
+			});
 		},
 		onClick: function(el, tp){
 			switch(el.id){

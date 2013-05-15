@@ -78,9 +78,14 @@ Component.entryPoint = function(NS){
 			filter = filter || null;
 			this.todoListWidget.setFilter(filter);
 			if (L.isObject(filter)){
-				this.elShow('bclearfilter');
+				var group = NS.manager.groupList.get(filter['groupid']);
+				if (L.isValue(group)){
+					this.elSetHTML('grouptl', group.title);
+				}
+				this.elShow('filterbtns');
 			}else{
-				this.elHide('bclearfilter');
+				this.elSetHTML('grouptl', '');
+				this.elHide('filterbtns');
 				this.groupListWidget.selectGroupById(0);
 			}
 		}
