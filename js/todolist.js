@@ -175,7 +175,8 @@ Component.entryPoint = function(NS){
 			'onCopyClick': null,
 			'onRemoveClick': null,
 			'onSelectClick': null,
-			'onSave': null
+			'onSave': null,
+			'onExecute': null
 		}, cfg || {});
 		TodoRowWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'row' 
@@ -200,8 +201,7 @@ Component.entryPoint = function(NS){
 			}else if (priority.color.length > 0){
 				color = priority.color;
 			}
-			Dom.setStyle(this.gel('id'), 'color', color);
-			
+			Dom.setStyle(this.gel('tline'), 'color', color);
 			
 			E.on(this.gel('id'), 'dblclick', function(e){
 				__self.onEditClick();
@@ -209,9 +209,12 @@ Component.entryPoint = function(NS){
 
 			var elCheck = this.gel('chk');
 			elCheck.checked = todo.isExecute;
+			this._updateExecuteStatus();
 			
 			E.on(elCheck, 'change', function(e){
+				todo.isExecute = elCheck.checked;
 				NS.manager.todoExecute(todo, elCheck.checked);
+				__self._updateExecuteStatus();
 			});
 		},
 		onClick: function(el, tp){
@@ -236,6 +239,9 @@ Component.entryPoint = function(NS){
 		},
 		onSave: function(){
 			NS.life(this.cfg['onSave'], this);
+		},
+		onExecute: function(){
+			NS.life(this.cfg['onExecute'], this);
 		},
 		editorShow: function(){
 			if (!L.isNull(this.editorWidget)){ return; }
@@ -268,6 +274,13 @@ Component.entryPoint = function(NS){
 		},
 		show: function(){
 			Dom.removeClass(this.gel('id'), 'hide');
+		},
+		_updateExecuteStatus: function(){
+			if (this.todo.isExecute){
+				Dom.addClass(this.gel('tline'), 'executed');
+			}else{
+				Dom.removeClass(this.gel('tline'), 'executed');
+			}
 		}
 	});
 	NS.TodoRowWidget = TodoRowWidget;	

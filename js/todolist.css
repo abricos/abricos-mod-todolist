@@ -22,6 +22,10 @@
     position: relative;
     white-space: nowrap;
 }
+.aw-todolist .todolist .elrow .executed {
+	font-style: italic;
+}
+
 .aw-todolist .todolist .elrow .shadow {
     background: url("/modules/todolist/images/shadow.png") repeat-y scroll 0 0 transparent;
     width: 16px;

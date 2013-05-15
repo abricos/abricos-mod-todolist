@@ -167,6 +167,9 @@ Component.entryPoint = function(NS){
 	NS.Todo = Todo;
 	
 	var todoListOrder = function(t1, t2){
+		if (!t1.isExecute && t2.isExecute){ return -1; }
+		if (t1.isExecute && !t2.isExecute){ return 1; }
+		
 		var p1 = t1.getPriority(),
 			p2 = t2.getPriority();
 		var o1 = L.isValue(p1) ? p1.order : 0,
