@@ -188,15 +188,10 @@ Component.entryPoint = function(NS){
 			this.editorWidget = null;
 		},
 		onLoad: function(todo){
-			this.elSetHTML({
-				'tl': NS.textToView(todo.title)
-			});
-			
 			var __self = this;
 			
-			E.on(this.gel('id'), 'dblclick', function(e){
-				__self.onEditClick();
-				return false;
+			this.elSetHTML({
+				'tl': NS.textToView(todo.title)
 			});
 			
 			var priority = todo.getPriority(), color = "";
@@ -206,6 +201,18 @@ Component.entryPoint = function(NS){
 				color = priority.color;
 			}
 			Dom.setStyle(this.gel('id'), 'color', color);
+			
+			
+			E.on(this.gel('id'), 'dblclick', function(e){
+				__self.onEditClick();
+			});
+
+			var elCheck = this.gel('chk');
+			elCheck.checked = todo.isExecute;
+			
+			E.on(elCheck, 'change', function(e){
+				NS.manager.todoExecute(todo, elCheck.checked);
+			});
 		},
 		onClick: function(el, tp){
 			switch(el.id){

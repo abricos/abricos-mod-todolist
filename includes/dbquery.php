@@ -169,7 +169,8 @@ class TodoListQuery {
 		likeid as lkid,
 		title as tl,
 		descript as dsc,
-		exectime as etm,
+		plantime as ptm,
+		executed as exc,
 		ord,
 		dateline as dl
 	";
@@ -197,14 +198,14 @@ class TodoListQuery {
 	public static function TodoAppend(Ab_Database $db, $userid, $d){
 		$sql = "
 			INSERT INTO ".$db->prefix."todolist
-			(userid, title, descript, groupid, priorityid, likeid, exectime, dateline) VALUES (
+			(userid, title, descript, groupid, priorityid, likeid, plantime, dateline) VALUES (
 				".bkint($userid).",
 				'".bkstr($d->tl)."',
 				'".bkstr($d->dsc)."',
 				".bkint($d->gid).",
 				".bkint($d->prtid).",
 				".bkint($d->lkid).",
-				".bkint($d->etm).",
+				".bkint($d->ptm).",
 				".TIMENOW."
 			)
 		";
@@ -220,11 +221,21 @@ class TodoListQuery {
 				groupid=".bkint($d->gid).",
 				priorityid=".bkint($d->prtid).",
 				likeid=".bkint($d->lkid).",
-				exectime=".bkint($d->etm)."
+				plantime=".bkint($d->ptm)."
 			WHERE userid=".bkint($userid)." AND todoid=".bkint($todoid)."
 			LIMIT 1
 		";
 		$db->query_write($sql);
+	}
+	
+	public static function TodoExecute(Ab_Database $db, $userid, $todoid, $isExecute){
+		$sql = "
+			UPDATE ".$db->prefix."todolist
+			SET executed=".($isExecute ? TIMENOW : 0)."
+			WHERE userid=".bkint($userid)." AND todoid=".bkint($todoid)."
+			LIMIT 1
+		";
+		$db->query_write($sql);		
 	}
 }
 

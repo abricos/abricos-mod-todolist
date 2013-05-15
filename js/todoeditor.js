@@ -56,7 +56,7 @@ Component.entryPoint = function(NS){
 			});
 
 			this.timeInputWidget = new NS.TimeInputWidget(this.gel('time'), {
-				'value': todo.exectime
+				'value': todo.plantime
 			});
 			
 			this.elSetValue({
@@ -93,7 +93,7 @@ Component.entryPoint = function(NS){
 				'dsc': this.gel('dsc').value,
 				'prtid': this.prioritySelectWidget.getValue()|0,
 				'gid': this.groupSelectWidget.getValue()|0,
-				'etm': this.timeInputWidget.getValue()
+				'ptm': this.timeInputWidget.getValue()
 			};
 			
 			this.elHide('btnsc');

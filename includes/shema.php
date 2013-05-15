@@ -84,12 +84,11 @@ if ($updateManager->isInstall()){
 			`priorityid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Приоритет',
 			`likeid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Отношение',
 			
-			`exectime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Предположительное время выполнения в секундах',
+			`plantime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Предположительное время выполнения в секундах',
 			
 			`ord` int(5) NOT NULL DEFAULT 0 COMMENT 'Сортировка',
 			
-			`checked` tinyint(1) unsigned NOT NULL DEFAULT 0 COMMENT 'Выполнено',
-			`checkdate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата/время выполнения',
+			`executed` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата/время выполнения',
 
 			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
 			`deldate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата удаления',
@@ -123,7 +122,7 @@ if ($updateManager->isInstall()){
 			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
 			`deldate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата удаления',
 	
-			PRIMARY KEY (`todoid`),
+			PRIMARY KEY (`planid`),
 			KEY (`userid`)
 		)".$charset
 	);

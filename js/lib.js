@@ -141,7 +141,8 @@ Component.entryPoint = function(NS){
 			'prtid': 0,
 			'lkid': 0,
 			'ord': 0,
-			'etm': 0,
+			'ptm': 0,
+			'exc': 0,
 			'dl': (new Date()).getTime()/1000
 		}, d || {});
 		Todo.superclass.constructor.call(this, d);
@@ -154,7 +155,9 @@ Component.entryPoint = function(NS){
 			this.priorityid = d['prtid']|0;
 			this.likeid = d['lkid']|0;
 			this.order = d['ord']|0;
-			this.exectime = d['etm']|0;
+			this.plantime = d['ptm']|0;
+			this.executed = d['exc']|0; // время выполнения
+			this.isExecute = this.executed > 0;
 			this.date = d['dl']|0;
 		},
 		getPriority: function(){
@@ -354,6 +357,21 @@ Component.entryPoint = function(NS){
 			this.groupList.foreach(function(group){
 				group.todoCount = gs[group.id]|0;
 			});
+		},
+		todoExecute: function(todo, isExecute, callback){
+			var __self = this;
+			this.ajax({
+				'do': 'todoexecute',
+				'todoid': todo.id,
+				'isexecute': isExecute
+			}, function(d){
+				if (L.isValue(d) && L.isValue(d['todo'])){
+					todo.update(d['todo']);
+					__self._todoCountInGroupCalculate();
+					__self.onTodoListChanged();
+				}
+				NS.life(callback, todo);
+			});			
 		}
 	};
 	NS.manager = null;

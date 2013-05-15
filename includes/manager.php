@@ -57,6 +57,7 @@ class TodoListManager extends Ab_ModuleManager {
 			case "groupsave": return $this->GroupSaveToAJAX($d->groupid, $d->savedata);
 			case "todolist": return $this->TodoListToAJAX();
 			case "todosave": return $this->TodoSaveToAJAX($d->todoid, $d->savedata);
+			case "todoexecute": return $this->TodoExecuteToAJAX($d->todoid, $d->isexecute);
 		}
 
 		return null;
@@ -229,7 +230,6 @@ class TodoListManager extends Ab_ModuleManager {
 		return $ret;
 	}
 	
-	
 	/**
 	 * @return TodoList
 	 */
@@ -253,10 +253,30 @@ class TodoListManager extends Ab_ModuleManager {
 		return $ret;
 	}
 	
+	public function Todo($todoid){
+		if (!$this->IsViewRole()){ return null; }
+	
+		$d = TodoListQuery::Todo($this->db, $this->userid, $todoid);
+		if (empty($d)){ return null; }
+	
+		return new TodoItem($d);
+	}
+	
+	public function TodoToAJAX($todoid){
+		$todo = $this->Todo($todoid);
+	
+		if (empty($todo)){ return null; }
+	
+		$ret = new stdClass();
+		$ret->todo = $todo->ToAJAX();
+	
+		return $ret;
+	}
+	
 	/**
 	 * @param integer $todoid
 	 * @param object $sd
-	 * @return TodoItem
+	 * @return integer идентификатор дела
 	 */
 	public function TodoSave($todoid, $sd){
 		if (!$this->IsWriteRole()){ return null; }
@@ -275,22 +295,24 @@ class TodoListManager extends Ab_ModuleManager {
 			TodoListQuery::TodoUpdate($this->db, $this->userid, $todoid, $sd);
 		}
 		
-		$d = TodoListQuery::Todo($this->db, $this->userid, $todoid);
-		if (empty($d)){ return null; }
-		
-		return new TodoItem($d);
+		return $todoid;
 	}
 	
 	public function TodoSaveToAJAX($todoid, $sd){
-		$todo = $this->TodoSave($todoid, $sd);
-		
-		if (empty($todo)){ return null; }
-		
-		$ret = new stdClass();
-		$ret->todo = $todo->ToAJAX();
-		
-		return $ret;
+		$todoid = $this->TodoSave($todoid, $sd);
+		return $this->TodoToAJAX($todoid);
 	}
+	
+	public function TodoExecute($todoid, $isExecute){
+		if (!$this->IsWriteRole()){ return null; }
+	
+		TodoListQuery::TodoExecute($this->db, $this->userid, $todoid, $isExecute);
+	}
+	
+	public function TodoExecuteToAJAX($todoid, $isExecute){
+		$this->TodoExecute($todoid, $isExecute);
+		return $this->TodoToAJAX($todoid);
+	}	
 	
 	public function ParamToObject($o){
 		if (is_array($o)){

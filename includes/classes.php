@@ -64,7 +64,9 @@ class TodoItem extends TodoList_Item {
 	public $groupid;
 	public $priorityid;
 	public $likeid;
-	public $exectime;
+	public $plantime;
+	public $executed;
+	public $isExecute;
 	public $date;
 	
 	public function __construct($d){
@@ -75,7 +77,9 @@ class TodoItem extends TodoList_Item {
 		$this->groupid = intval($d['gid']);
 		$this->priorityid = intval($d['prtid']);
 		$this->likeid = intval($d['lkid']);
-		$this->exectime = intval($d['etm']);
+		$this->plantime = intval($d['ptm']);
+		$this->executed = intval($d['exc']);
+		$this->isExecute = $this->executed > 0;
 		$this->date = intval($d['dl']);
 	}
 	
@@ -86,7 +90,8 @@ class TodoItem extends TodoList_Item {
 		$ret->gid = $this->groupid;
 		$ret->prtid = $this->priorityid;
 		$ret->lkid = $this->likeid;
-		$ret->etm = $this->exectime;
+		$ret->ptm = $this->plantime;
+		$ret->exc = $this->executed;
 		$ret->dl = $this->date;
 		
 		return $ret;
