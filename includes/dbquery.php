@@ -112,7 +112,7 @@ class TodoListQuery {
 			SELECT
 				".TodoListQuery::$GroupFields."
 			FROM ".$db->prefix."todolist_group
-			WHERE userid=".bkint($userid)."
+			WHERE userid=".bkint($userid)." AND deldate=0
 		";
 		return $db->query_read($sql);
 	}
@@ -234,6 +234,25 @@ class TodoListQuery {
 			SET executed=".($isExecute ? TIMENOW : 0)."
 			WHERE userid=".bkint($userid)." AND todoid=".bkint($todoid)."
 			LIMIT 1
+		";
+		$db->query_write($sql);		
+	}
+	
+	public static function TodoRemove(Ab_Database $db, $userid, $todoid){
+		$sql = "
+			UPDATE ".$db->prefix."todolist
+			SET deldate=".TIMENOW."
+			WHERE userid=".bkint($userid)." AND todoid=".bkint($todoid)."
+			LIMIT 1
+		";
+		$db->query_write($sql);		
+	}
+
+	public static function TodoRemoveByGroupId(Ab_Database $db, $userid, $groupid){
+		$sql = "
+			UPDATE ".$db->prefix."todolist
+			SET deldate=".TIMENOW."
+			WHERE userid=".bkint($userid)." AND groupid=".bkint($groupid)."
 		";
 		$db->query_write($sql);		
 	}

@@ -304,6 +304,25 @@ Component.entryPoint = function(NS){
 				NS.life(callback, group);
 			});
 		},
+		groupRemove: function(groupid, callback){
+			var __self = this;
+			this.ajax({
+				'do': 'groupremove',
+				'groupid': groupid
+			}, function(d){
+				__self.groupList.remove(groupid);
+				var tids = [];
+				__self.todoList.foreach(function(todo){
+					if (todo.groupid == groupid){
+						tids[tids.length] = todo.id;
+					}
+				});
+				for (var i=0; i<tids.length; i++){
+					__self.todoList.remove(tids[i]);
+				}
+				NS.life(callback);
+			});			
+		},
 		groupListOrderSave: function(orders){
 			Brick.console(orders);
 		},
@@ -374,6 +393,18 @@ Component.entryPoint = function(NS){
 					__self.onTodoListChanged();
 				}
 				NS.life(callback, todo);
+			});			
+		},
+		todoRemove: function(todoid, callback){
+			var __self = this;
+			this.ajax({
+				'do': 'todoremove',
+				'todoid': todoid
+			}, function(d){
+				__self.todoList.remove(todoid);
+				__self._todoCountInGroupCalculate();
+				__self.onTodoListChanged();
+				NS.life(callback);
 			});			
 		}
 	};

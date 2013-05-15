@@ -50,6 +50,9 @@ Component.entryPoint = function(NS){
 					__self.setFilter({
 						'groupid': groupid
 					});
+				},
+				'onGroupRemoved': function(){
+					__self.todoListWidget.renderList();
 				}
 			});
 			this.todoListWidget = new NS.TodoListWidget(this.gel('todolist'));

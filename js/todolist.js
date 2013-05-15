@@ -66,7 +66,8 @@ Component.entryPoint = function(NS){
 					'onCopyClick': function(w){__self.onTodoCopyClick(w);},
 					'onRemoveClick': function(w){__self.onTodoRemoveClick(w);},
 					'onSelectClick': function(w){__self.onTodoSelectClick(w);},
-					'onSave': function(w){ __self.renderList(); }
+					'onSave': function(w){ __self.renderList(); },
+					'onExecute': function(w){ __self.renderList(); }
 				});
 				
 				new NS.RowDragItem(div, {
@@ -117,8 +118,7 @@ Component.entryPoint = function(NS){
 		},
 		onTodoRemoveClick: function(w){
 			var __self = this;
-			new TodoRemovePanel(w.todo, function(list){
-				__self.list.remove(w.todo.id);
+			new TodoRemovePanel(w.todo, function(){
 				__self.renderList();
 			});
 		},
@@ -213,8 +213,10 @@ Component.entryPoint = function(NS){
 			
 			E.on(elCheck, 'change', function(e){
 				todo.isExecute = elCheck.checked;
+				NS.manager.todoList.update([]); // для сортировки
 				NS.manager.todoExecute(todo, elCheck.checked);
 				__self._updateExecuteStatus();
+				__self.onExecute();
 			});
 		},
 		onClick: function(el, tp){

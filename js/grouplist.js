@@ -19,7 +19,8 @@ Component.entryPoint = function(NS){
 	
 	var GroupListWidget = function(container, cfg){
 		cfg = L.merge({
-			'onSelectedItem': null
+			'onSelectedItem': null,
+			'onGroupRemoved': null
 		}, cfg || {});
 		
 		GroupListWidget.superclass.constructor.call(this, container, {
@@ -123,8 +124,8 @@ Component.entryPoint = function(NS){
 		onGroupRemoveClick: function(w){
 			var __self = this;
 			new GroupRemovePanel(w.group, function(list){
-				__self.list.remove(w.group.id);
 				__self.renderList();
+				NS.life(__self.cfg['onGroupRemoved']);
 			});
 		},
 		onGroupSelectClick: function(w){

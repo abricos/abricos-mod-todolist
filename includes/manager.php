@@ -55,9 +55,11 @@ class TodoListManager extends Ab_ModuleManager {
 			case "initdata": return $this->InitDataToAJAX();
 			case "grouplist": return $this->GroupListToAJAX();
 			case "groupsave": return $this->GroupSaveToAJAX($d->groupid, $d->savedata);
+			case "groupremove": return $this->GroupRemove($d->groupid);
 			case "todolist": return $this->TodoListToAJAX();
 			case "todosave": return $this->TodoSaveToAJAX($d->todoid, $d->savedata);
 			case "todoexecute": return $this->TodoExecuteToAJAX($d->todoid, $d->isexecute);
+			case "todoremove": return $this->TodoRemove($d->todoid);
 		}
 
 		return null;
@@ -230,6 +232,15 @@ class TodoListManager extends Ab_ModuleManager {
 		return $ret;
 	}
 	
+	public function GroupRemove($groupid){
+		if (!$this->IsWriteRole()){ return null; }
+		
+		TodoListQuery::GroupRemove($this->db, $this->userid, $groupid);
+		TodoListQuery::TodoRemoveByGroupId($this->db, $this->userid, $groupid);
+		
+		return true;
+	}
+	
 	/**
 	 * @return TodoList
 	 */
@@ -313,6 +324,13 @@ class TodoListManager extends Ab_ModuleManager {
 		$this->TodoExecute($todoid, $isExecute);
 		return $this->TodoToAJAX($todoid);
 	}	
+
+	public function TodoRemove($todoid){
+		if (!$this->IsWriteRole()){ return null; }
+	
+		TodoListQuery::TodoRemove($this->db, $this->userid, $todoid);
+		return true;
+	}
 	
 	public function ParamToObject($o){
 		if (is_array($o)){
