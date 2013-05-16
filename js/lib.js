@@ -112,7 +112,8 @@ Component.entryPoint = function(NS){
 	
 	var Group = function(d){
 		d = L.merge({
-			'tl': ''
+			'tl': '',
+			'ord': 0
 		}, d || {});
 		Group.superclass.constructor.call(this, d);
 	};
@@ -123,12 +124,15 @@ Component.entryPoint = function(NS){
 		},
 		update: function(d){
 			this.title = d['tl'];
+			this.order = d['ord']|0;
 		}
 	});
 	NS.Group = Group;
 	
 	var GroupList = function(d){
-		GroupList.superclass.constructor.call(this, d, Group);
+		GroupList.superclass.constructor.call(this, d, Group, {
+			'order': '!order'
+		});
 	};
 	YAHOO.extend(GroupList, SysNS.ItemList, {});
 	NS.GroupList = GroupList;
@@ -185,9 +189,7 @@ Component.entryPoint = function(NS){
 			'order': todoListOrder
 		});
 	};
-	YAHOO.extend(TodoList, SysNS.ItemList, {
-		
-	});
+	YAHOO.extend(TodoList, SysNS.ItemList, {});
 	NS.TodoList = TodoList;
 	
 	
@@ -323,8 +325,15 @@ Component.entryPoint = function(NS){
 				NS.life(callback);
 			});			
 		},
-		groupListOrderSave: function(orders){
-			Brick.console(orders);
+		groupListOrderSave: function(orders, callback){
+			var __self = this;
+			this.ajax({
+				'do': 'grouplistorder',
+				'grouporders': orders
+			}, function(d){
+				__self._updateGroupList(d);
+				NS.life(callback);
+			});
 		},
 		
 		_updateTodoList: function(d){

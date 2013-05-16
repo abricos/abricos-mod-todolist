@@ -80,22 +80,26 @@ Component.entryPoint = function(NS){
 				new NS.RowDragItem(div, {
 					'endDragCallback': function(dgi, elDiv){
 						var chs = elList.childNodes, ordb = NS.manager.groupList.count();
-						var orders = {};
+						var orders = [];
 						for (var i=0;i<chs.length;i++){
 							var group = chs[i]['group'];
 							if (group){
 								group.order = ordb;
-								orders[group.id] = ordb;
+								orders[orders.length] = {
+									'id': group.id,
+									'o': ordb
+								};
 								ordb--;
 							}
 						}
+						NS.manager.groupList.reorder();
 						NS.manager.groupListOrderSave(orders);
 						__self.renderList();
 					}
 				});
 		
 				ws[ws.length] = w;
-			}, 'order', true);
+			});
 			
 			new YAHOO.util.DDTarget(elList);
 		},

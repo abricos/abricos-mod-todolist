@@ -102,7 +102,6 @@ class TodoListQuery {
 	
 	public static $GroupFields = "
 		groupid as id,
-		parentgroupid as pid,
 		title as tl,
 		ord
 	";
@@ -113,6 +112,7 @@ class TodoListQuery {
 				".TodoListQuery::$GroupFields."
 			FROM ".$db->prefix."todolist_group
 			WHERE userid=".bkint($userid)." AND deldate=0
+			ORDER BY ord DESC, title
 		";
 		return $db->query_read($sql);
 	}
@@ -150,6 +150,21 @@ class TodoListQuery {
 			LIMIT 1
 		";
 		$db->query_write($sql);
+	}
+	
+	public static function GroupListSetOrder(Ab_Database $db, $userid, $orders){
+		if (count($orders) == 0){ return; }
+		
+		for ($i=0; $i<count($orders); $i++){
+			$di = $orders[$i];
+			$sql = "
+				UPDATE ".$db->prefix."todolist_group
+				SET ord=".bkint($di->o)."
+				WHERE userid=".bkint($userid)." AND groupid=".bkint($di->id)."
+				LIMIT 1
+			";
+			$db->query_write($sql);			
+		}
 	}
 	
 	public static function GroupRemove(Ab_Database $db, $userid, $groupid){

@@ -54,6 +54,7 @@ class TodoListManager extends Ab_ModuleManager {
 		switch($d->do){
 			case "initdata": return $this->InitDataToAJAX();
 			case "grouplist": return $this->GroupListToAJAX();
+			case "grouplistorder": return $this->GroupListSetOrder($d->grouporders);
 			case "groupsave": return $this->GroupSaveToAJAX($d->groupid, $d->savedata);
 			case "groupremove": return $this->GroupRemove($d->groupid);
 			case "todolist": return $this->TodoListToAJAX();
@@ -230,6 +231,14 @@ class TodoListManager extends Ab_ModuleManager {
 		$ret->group = $group->ToAJAX();
 	
 		return $ret;
+	}
+
+	public function GroupListSetOrder($orders){
+		if (!$this->IsWriteRole()){ return null; }
+		
+		TodoListQuery::GroupListSetOrder($this->db, $this->userid, $orders);
+		
+		return true;
 	}
 	
 	public function GroupRemove($groupid){

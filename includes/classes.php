@@ -10,15 +10,18 @@ require_once 'dbquery.php';
 
 class TodoGroup extends TodoList_Item {
 	public $title;
+	public $order;
 	
 	public function __construct($d){
 		parent::__construct($d);
 		$this->title = strval($d['tl']);
+		$this->order = intval($d['ord']);
 	}
 	
 	public function ToAJAX(){
 		$ret = parent::ToAJAX();
 		$ret->tl = $this->title;
+		$ret->ord = $this->order;
 		return $ret;
 	}
 }

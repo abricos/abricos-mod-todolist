@@ -40,8 +40,16 @@ Component.entryPoint = function(NS){
 		onLoad: function(){
 			var __self = this;
 			NS.initManager(function(){
-				__self.renderList();
+				__self._onLoadManager();
 			});
+		},
+		_onLoadManager: function(){
+			this.renderList();
+			/*
+			E.on(this.gel('id'), 'mouseout', function(e){
+				Brick.console('mouseout');
+			});
+			/**/
 		},
 		clearList: function(){
 			var ws = this.wsList;
@@ -82,14 +90,15 @@ Component.entryPoint = function(NS){
 								ordb--;
 							}
 						}
-						NS.manager.todoListOrderSave(orders);
+						// NS.manager.todoList.reorder();
+						// NS.manager.todoListOrderSave(orders);
 						__self.renderList();
 					}
 				});
 		
 				ws[ws.length] = w;
 				w.hide();
-			}, 'order', true);
+			});
 			this.setFilter(this.filter);
 			
 			new YAHOO.util.DDTarget(elList);
@@ -213,10 +222,11 @@ Component.entryPoint = function(NS){
 			
 			E.on(elCheck, 'change', function(e){
 				todo.isExecute = elCheck.checked;
-				NS.manager.todoList.update([]); // для сортировки
-				NS.manager.todoExecute(todo, elCheck.checked);
-				__self._updateExecuteStatus();
-				__self.onExecute();
+				NS.manager.todoExecute(todo, elCheck.checked, function(){
+					NS.manager.todoList.update([]); // для сортировки
+					__self._updateExecuteStatus();
+					__self.onExecute();
+				});
 			});
 		},
 		onClick: function(el, tp){
