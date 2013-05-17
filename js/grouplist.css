@@ -1,5 +1,5 @@
 .aw-todolist .grouplist .elrow {
-	height: 31px;
+	min-height: 31px;
 	position: relative;
 	border-bottom: 1px solid #DCDEE4;
 	cursor: pointer;

@@ -47,9 +47,7 @@ Component.entryPoint = function(NS){
 			
 			this.groupListWidget = new NS.GroupListWidget(this.gel('groplist'), {
 				'onSelectedItem': function(groupid){
-					__self.setFilter({
-						'groupid': groupid
-					});
+					__self.setFilter({'groupid': groupid});
 				},
 				'onGroupRemoved': function(){
 					__self.todoListWidget.renderList();
@@ -59,7 +57,8 @@ Component.entryPoint = function(NS){
 		},
 		onClick: function(el, tp){
 			switch(el.id){
-			case tp['baddtodo']: this.showNewTodoEditor(); return true;
+			case tp['baddtodo']: 
+				this.showNewTodoEditor(); return true;
 			case tp['baddgroup']: 
 			case tp['baddgroupc']: 
 				this.showNewGroupEditor(); return true;

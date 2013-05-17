@@ -73,7 +73,9 @@ Component.entryPoint = function(NS){
 				var w = new NS.GroupRowWidget(div, group, {
 					'onEditClick': function(w){__self.onGroupEditClick(w);},
 					'onRemoveClick': function(w){__self.onGroupRemoveClick(w);},
-					'onSelectClick': function(w){__self.onGroupSelectClick(w);},
+					'onSelectClick': function(w){
+						__self.selectGroupById(w.group.id);
+					},
 					'onSave': function(w){ __self.renderList(); }
 				});
 				
@@ -132,23 +134,19 @@ Component.entryPoint = function(NS){
 				NS.life(__self.cfg['onGroupRemoved']);
 			});
 		},
-		onGroupSelectClick: function(w){
-			var groupid = 0;
-			if (L.isValue(w)){
-				groupid = w.group.id;
-			}
-			this.selectGroupById(groupid);
-		},
 		selectGroupById: function(groupid){
 			this.allEditorClose();
+			var isChange = false;
 			this.foreach(function(w){
 				if (w.group.id == groupid){
-					w.select();
+					if (w.select()){isChange = true;}
 				}else{
-					w.unSelect();
+					if (w.unSelect()){isChange = true;}
 				}
 			});
-			NS.life(this.cfg['onSelectedItem'], groupid);
+			if (isChange){
+				NS.life(this.cfg['onSelectedItem'], groupid);
+			}
 		},
 		showNewEditor: function(fel){
 			if (!L.isNull(this.newEditorWidget)){ return; }
@@ -253,10 +251,14 @@ Component.entryPoint = function(NS){
 			this.editorWidget = null;
 		},
 		select: function(){
+			var isChange = !this.isSelect();
 			Dom.addClass(this.gel('wrap'), 'select');
+			return isChange;
 		},
 		unSelect: function(){
+			var isChange = this.isSelect();
 			Dom.removeClass(this.gel('wrap'), 'select');
+			return isChange;
 		},
 		isSelect: function(){
 			return Dom.hasClass(this.gel('wrap'), 'select');
