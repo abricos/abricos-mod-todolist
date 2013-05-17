@@ -51,6 +51,10 @@ Component.entryPoint = function(NS){
 				},
 				'onGroupRemoved': function(){
 					__self.todoListWidget.renderList();
+				},
+				'onReorderList': function(){
+					NS.manager.todoList.reorder();
+					__self.todoListWidget.renderList();
 				}
 			});
 			this.todoListWidget = new NS.TodoListWidget(this.gel('todolist'));

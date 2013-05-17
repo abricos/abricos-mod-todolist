@@ -20,6 +20,7 @@ Component.entryPoint = function(NS){
 	var GroupListWidget = function(container, cfg){
 		cfg = L.merge({
 			'onSelectedItem': null,
+			'onReorderList': null,
 			'onGroupRemoved': null
 		}, cfg || {});
 		
@@ -97,6 +98,7 @@ Component.entryPoint = function(NS){
 						NS.manager.groupList.reorder();
 						NS.manager.groupListOrderSave(orders);
 						__self.renderList();
+						__self.onReorderList();
 					}
 				});
 		
@@ -133,6 +135,9 @@ Component.entryPoint = function(NS){
 				__self.renderList();
 				NS.life(__self.cfg['onGroupRemoved']);
 			});
+		},
+		onReorderList: function(){
+			NS.life(this.cfg['onReorderList']);
 		},
 		selectGroupById: function(groupid){
 			this.allEditorClose();
@@ -208,7 +213,9 @@ Component.entryPoint = function(NS){
 				return true;
 			}
 			
-			this.onSelectClick();
+			if (!L.isValue(this.editorWidget)){
+				this.onSelectClick();
+			}
 			
 			return false;
 		},

@@ -163,9 +163,28 @@ Component.entryPoint = function(NS){
 			this.executed = d['exc']|0; // время выполнения
 			this.isExecute = this.executed > 0;
 			this.date = d['dl']|0;
+			
+			this._cachePriorityId = null;
+			this._cachePriority = null;
+			
+			this._cacheGroupId = null;
+			this._cacheGroup = null;
 		},
 		getPriority: function(){
-			return NS.manager.priorityList.get(this.priorityid);
+			if (this._cachePriorityId == this.priorityid){
+				return this._cachePriority;
+			}
+			this._cachePriorityId = this.priorityid;
+			this._cachePriority = NS.manager.priorityList.get(this.priorityid);
+			return this._cachePriority;
+		},
+		getGroup: function(){
+			if (this._cacheGroupId == this.groupid){
+				return this._cacheGroup;
+			}
+			this._cacheGroupId = this.groupid;
+			this._cacheGroup = NS.manager.groupList.get(this.groupid);
+			return this._cacheGroup;
 		}
 	});
 	NS.Todo = Todo;
@@ -176,11 +195,20 @@ Component.entryPoint = function(NS){
 		
 		var p1 = t1.getPriority(),
 			p2 = t2.getPriority();
-		var o1 = L.isValue(p1) ? p1.order : 0,
-			o2 = L.isValue(p2) ? p2.order : 0;
+		var po1 = L.isValue(p1) ? p1.order : 0,
+			po2 = L.isValue(p2) ? p2.order : 0;
 		
-		if (o1 > o2){ return -1; }
-		if (o1 < o2){ return 1; }
+		if (po1 > po2){ return -1; }
+		if (po1 < po2){ return 1; }
+		
+		var g1 = t1.getGroup(),
+			g2 = t2.getGroup();
+		var go1 = L.isValue(g1) ? g1.order : 0,
+			go2 = L.isValue(g2) ? g2.order : 0;
+
+		if (go1 > go2){ return -1; }
+		if (go1 < go2){ return 1; }
+
 		return 0;
 	};
 	
