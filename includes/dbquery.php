@@ -271,6 +271,83 @@ class TodoListQuery {
 		";
 		$db->query_write($sql);		
 	}
+	
+	public static $TagGroupFields = "
+		groupid as id,
+		title as tl,
+		ord
+	";
+	
+	public static function TagGroupList(Ab_Database $db, $userid){
+		$sql = "
+			SELECT
+				".TodoListQuery::$TagGroupFields."
+			FROM ".$db->prefix."todolist_taggroup
+			WHERE userid=".bkint($userid)." AND deldate=0
+			ORDER BY ord DESC, title
+		";
+		return $db->query_read($sql);
+	}
+	
+	public static function TagGroup(Ab_Database $db, $userid, $taggroupid){
+		$sql = "
+			SELECT
+				".TodoListQuery::$TagGroupFields."
+			FROM ".$db->prefix."todolist_taggroup
+			WHERE userid=".bkint($userid)." AND taggroupid=".bkint($taggroupid)." AND deldate=0
+			LIMIT 1
+		";
+		return $db->query_first($sql);
+	}
+	
+	public static function TagGroupAppend(Ab_Database $db, $userid, $d){
+		$sql = "
+			INSERT INTO ".$db->prefix."todolist_taggroup
+			(userid, title, dateline) VALUES (
+				".bkint($userid).",
+				'".bkstr($d->tl)."',
+				".TIMENOW."
+			)
+		";
+		$db->query_write($sql);
+		return $db->insert_id();
+	}
+	
+	public static function TagGroupUpdate(Ab_Database $db, $userid, $taggroupid, $d){
+		$sql = "
+			UPDATE ".$db->prefix."todolist_taggroup
+			SET title='".bkstr($d->tl)."'
+			WHERE userid=".bkint($userid)." AND taggroupid=".bkint($taggroupid)."
+			LIMIT 1
+		";
+		$db->query_write($sql);
+	}
+	
+	public static function TagGroupListSetOrder(Ab_Database $db, $userid, $orders){
+		if (count($orders) == 0){ return; }
+	
+		for ($i=0; $i<count($orders); $i++){
+			$di = $orders[$i];
+			$sql = "
+				UPDATE ".$db->prefix."todolist_taggroup
+				SET ord=".bkint($di->o)."
+				WHERE userid=".bkint($userid)." AND taggroupid=".bkint($di->id)."
+				LIMIT 1
+			";
+			$db->query_write($sql);
+		}
+	}
+	
+	public static function TagGroupRemove(Ab_Database $db, $userid, $taggroupid){
+		$sql = "
+			UPDATE ".$db->prefix."todolist_taggroup
+			SET deldate=".TIMENOW."
+			WHERE userid=".bkint($userid)." AND taggroupid=".bkint($taggroupid)."
+			LIMIT 1
+		";
+		$db->query_write($sql);
+	}
+		
 }
 
 ?>

@@ -55,10 +55,47 @@ class TodoPriority extends TodoList_Item {
 
 class TodoPriorityList extends TodoList_ItemList { }
 
-class TodoLike extends TodoList_Item {
-}
+class TodoTagGroup extends TodoList_Item {
+	public $title;
+	public $order;
 
-class TodoLikeList extends TodoList_ItemList { }
+	public function __construct($d){
+		parent::__construct($d);
+		$this->title = strval($d['tl']);
+		$this->order = intval($d['ord']);
+	}
+
+	public function ToAJAX(){
+		$ret = parent::ToAJAX();
+		$ret->tl = $this->title;
+		$ret->ord = $this->order;
+		return $ret;
+	}
+}
+class TodoTagGroupList extends TodoList_ItemList { }
+
+
+class TodoTag extends TodoList_Item {
+	public $title;
+	public $taggroupid;
+	public $order;
+	
+	public function __construct($d){
+		parent::__construct($d);
+		$this->title = strval($d['tl']);
+		$this->taggroupid = intval($d['tgid']);
+		$this->order = intval($d['ord']);
+	}
+
+	public function ToAJAX(){
+		$ret = parent::ToAJAX();
+		$ret->tl = $this->title;
+		$ret->tgid = $this->taggroupid;
+		$ret->ord = $this->order;
+		return $ret;
+	}
+}
+class TodoTagList extends TodoList_ItemList { }
 
 class TodoItem extends TodoList_Item {
 	

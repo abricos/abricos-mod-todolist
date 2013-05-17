@@ -129,5 +129,53 @@ if ($updateManager->isInstall()){
 	
 }
 
+if ($updateManager->isUpdate('0.1.1')){
+	
+	// Группа тегов
+	$db->query_write("
+		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_taggroup (
+			`taggroupid` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
+	
+			`title` varchar(50) NOT NULL DEFAULT '' COMMENT 'Заголовок',
+			`ord` int(5) NOT NULL DEFAULT 0 COMMENT 'Сортировка',
+	
+			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
+			`deldate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата удаления',
+	
+			PRIMARY KEY (`taggroupid`),
+			KEY (`userid`)
+		)".$charset
+	);
+	
+	// Теги
+	$db->query_write("
+		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_tag (
+			`tagid` int(10) unsigned NOT NULL auto_increment COMMENT 'Идентификатор',
+			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
+			`taggroupid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Группа тегов',
+
+			`title` varchar(50) NOT NULL DEFAULT '' COMMENT 'Заголовок',
+			`ord` int(5) NOT NULL DEFAULT 0 COMMENT 'Сортировка',
+				
+			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
+			`deldate` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата удаления',
+	
+			PRIMARY KEY (`tagid`),
+			KEY (`userid`)
+		)".$charset
+	);
+
+	// Связь тега с делом
+	$db->query_write("
+		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_tagtodo (
+			`tagid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Тег',
+			`todoid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дело',
+			UNIQUE KEY `tagtodo` (`tagid`, `todoid`)
+		)".$charset
+	);
+	
+}
+
 
 ?>
