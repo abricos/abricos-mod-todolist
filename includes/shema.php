@@ -131,6 +131,16 @@ if ($updateManager->isInstall()){
 
 if ($updateManager->isUpdate('0.1.1')){
 	
+	// Зависимость от выполнения другого дела
+	$db->query_write("
+		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_depends (
+			`tagid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Тег',
+			`todoid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дело',
+			UNIQUE KEY `tagtodo` (`tagid`, `todoid`)
+		)".$charset
+	);
+	
+	
 	// Группа тегов
 	$db->query_write("
 		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_taggroup (
