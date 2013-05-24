@@ -272,6 +272,50 @@ class TodoListQuery {
 		$db->query_write($sql);		
 	}
 	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	/*                       Зависимость дел                     */
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
+	public static function DependList(Ab_Database $db, $userid){
+		$sql = "
+			SELECT
+				d.todoid as id,
+				d.dependid as did
+			FROM ".$db->prefix."todolist t
+			INNER JOIN ".$db->prefix."todolist_depends d ON t.todoid=d.todoid
+			INNER JOIN ".$db->prefix."todolist td ON d.todoid=td.todoid 
+			WHERE t.userid=".bkint($userid)." AND t.deldate=0
+				AND td.userid=".bkint($userid)." AND td.deldate=0 
+		";
+		return $db->query_read($sql);
+	}
+	
+	public static function DependAppend(Ab_Database $db, $userid, $todoid, $dependid){
+		$sql = "
+			INSERT IGNORE INTO ".$db->prefix."todolist_depends 
+			(userid, todoid, dependid, dateline) VALUES (
+				".bkint($userid).",
+				".bkint($todoid).",
+				".bkint($dependid).",
+				".TIMENOW."
+			)
+		";
+		$db->query_write($sql);
+	}	
+	
+	public static function DependRemove(Ab_Database $db, $userid, $todoid, $dependid){
+		$sql = "
+			DELETE FROM ".$db->prefix."todolist_depends
+			WHERE userid=".bkint($userid)." AND todoid=".bkint($todoid)."
+				AND dependid=".bkint($dependid)."
+		";
+		$db->query_write($sql);
+	}
+	
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	/*                            Теги                           */
+	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+	
 	public static $TagGroupFields = "
 		groupid as id,
 		title as tl,

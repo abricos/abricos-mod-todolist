@@ -61,6 +61,7 @@ class TodoListManager extends Ab_ModuleManager {
 			case "todosave": return $this->TodoSaveToAJAX($d->todoid, $d->savedata);
 			case "todoexecute": return $this->TodoExecuteToAJAX($d->todoid, $d->isexecute);
 			case "todoremove": return $this->TodoRemove($d->todoid);
+			case "dependlist": return $this->DependListToAJAX();
 		}
 
 		return null;
@@ -82,6 +83,9 @@ class TodoListManager extends Ab_ModuleManager {
 
 		$obj = $this->TodoListToAJAX();
 		$ret->todos = $obj->todos;
+
+		$obj = $this->DependListToAJAX();
+		$ret->depends = $obj->depends;
 		
 		return $ret;
 	}
@@ -339,6 +343,38 @@ class TodoListManager extends Ab_ModuleManager {
 	
 		TodoListQuery::TodoRemove($this->db, $this->userid, $todoid);
 		return true;
+	}
+	
+	/**
+	 * @return TodoDependList
+	 */
+	public function DependList(){
+		if (!$this->IsViewRole()){ return null; }
+		
+		$rows = TodoListQuery::DependList($this->db, $this->userid);
+
+		$list = new TodoDependList();
+		while (($d = $this->db->fetch_array($rows))){
+			
+			$depend = $list->Get($d['id']);
+			if (empty($depend)){
+				$depend = new TodoDepend($d);
+				$list->Add($depend);
+			}else{
+				$depend->AddTodoDepend($d['did']);
+			}
+		}
+		return $list;
+	}
+	
+	public function DependListToAJAX(){
+		$list = $this->DependList();
+		if (empty($list)){ return null; }
+		
+		$ret = new stdClass();
+		$ret->depends = $list->ToAJAX();
+		
+		return $ret;
 	}
 	
 	public function ParamToObject($o){

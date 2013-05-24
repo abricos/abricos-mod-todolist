@@ -8,7 +8,7 @@
 
 require_once 'dbquery.php';
 
-class TodoGroup extends TodoList_Item {
+class TodoGroup extends AbricosItem {
 	public $title;
 	public $order;
 	
@@ -26,10 +26,10 @@ class TodoGroup extends TodoList_Item {
 	}
 }
 
-class TodoGroupList extends TodoList_ItemList { }
+class TodoGroupList extends AbricosList { }
 
 
-class TodoPriority extends TodoList_Item {
+class TodoPriority extends AbricosItem {
 	public $title;
 	public $color;
 	public $isdefault;
@@ -53,9 +53,9 @@ class TodoPriority extends TodoList_Item {
 	}
 }
 
-class TodoPriorityList extends TodoList_ItemList { }
+class TodoPriorityList extends AbricosList { }
 
-class TodoTagGroup extends TodoList_Item {
+class TodoTagGroup extends AbricosItem {
 	public $title;
 	public $order;
 
@@ -72,10 +72,10 @@ class TodoTagGroup extends TodoList_Item {
 		return $ret;
 	}
 }
-class TodoTagGroupList extends TodoList_ItemList { }
+class TodoTagGroupList extends AbricosList { }
 
 
-class TodoTag extends TodoList_Item {
+class TodoTag extends AbricosItem {
 	public $title;
 	public $taggroupid;
 	public $order;
@@ -95,9 +95,9 @@ class TodoTag extends TodoList_Item {
 		return $ret;
 	}
 }
-class TodoTagList extends TodoList_ItemList { }
+class TodoTagList extends AbricosList { }
 
-class TodoItem extends TodoList_Item {
+class TodoItem extends AbricosItem {
 	
 	public $title;
 	public $descript;
@@ -138,7 +138,34 @@ class TodoItem extends TodoList_Item {
 	}
 }
 
-class TodoList extends TodoList_ItemList { }
+class TodoList extends AbricosList { }
+
+class TodoDepend extends AbricosItem {
+	
+	public $depends = array();
+	
+	public function __construct($d){
+		parent::__construct($d);
+		
+		$this->AddTodoDepend($d['did']);
+	}
+	
+	/**
+	 * Добавить зависимость от дела
+	 * @param integer $todoid
+	 */
+	public function AddTodoDepend($todoid){
+		array_push($this->depends, $todoid);
+	}
+	
+	public function ToAJAX(){
+		$ret = parent::ToAJAX();
+		$ret->deps = $this->depends;
+		return $ret;
+	}
+}
+
+class TodoDependList extends AbricosList { }
 
 class TodoListUserConfig {
 	public function __construct($d){
@@ -171,92 +198,4 @@ class TodoListConfig {
 	}
 }
 
-
-class TodoList_Item {
-	public $id;
-
-	public function __construct($d){
-		$this->id = intval($d['id']);
-	}
-
-	public function ToAJAX(){
-		$ret = new stdClass();
-		$ret->id = $this->id;
-		return $ret;
-	}
-}
-
-class TodoList_ItemList {
-
-	protected $_list = array();
-	protected $_map = array();
-	protected $_ids = array();
-
-	protected $isCheckDouble = false;
-
-	public function __construct(){
-		$this->_list = array();
-		$this->_map = array();
-	}
-
-	public function Add(TodoList_Item $item = null){
-		if (empty($item)){
-			return;
-		}
-
-		if ($this->isCheckDouble){
-			$checkItem = $this->Get($item->id);
-			if (!empty($checkItem)){
-				return;
-			}
-		}
-
-		$index = count($this->_list);
-		$this->_list[$index] = $item;
-		$this->_map[$item->id] = $index;
-
-		array_push($this->_ids, $item->id);
-	}
-
-	/**
-	 * Массив идентификаторов
-	 */
-	public function Ids(){
-		return $this->_ids;
-	}
-
-	public function Count(){
-		return count($this->_list);
-	}
-
-	/**
-	 * @param integer $index
-	 * @return TodoList_Item
-	 */
-	public function GetByIndex($index){
-		return $this->_list[$index];
-	}
-
-	/**
-	 * @param integer $id
-	 * @return TodoList_Item
-	 */
-	public function Get($id){
-		$index = $this->_map[$id];
-		return $this->_list[$index];
-	}
-
-	public function ToAJAX(){
-		$list = array();
-		$count = $this->Count();
-		for ($i=0; $i<$count; $i++){
-			array_push($list, $this->GetByIndex($i)->ToAJAX());
-		}
-
-		$ret = new stdClass();
-		$ret->list = $list;
-
-		return $ret;
-	}
-}
 ?>

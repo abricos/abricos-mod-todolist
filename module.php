@@ -17,7 +17,7 @@ class TodoListModule extends Ab_Module {
 	
 	public function TodoListModule(){
 		// версия модуля
-		$this->version = "0.1";
+		$this->version = "0.1.1";
 
 		// имя модуля 
 		$this->name = "todolist";

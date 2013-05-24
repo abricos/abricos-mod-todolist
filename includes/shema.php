@@ -130,15 +130,23 @@ if ($updateManager->isInstall()){
 }
 
 if ($updateManager->isUpdate('0.1.1')){
-	
+
 	// Зависимость от выполнения другого дела
 	$db->query_write("
 		CREATE TABLE IF NOT EXISTS ".$pfx."todolist_depends (
+			`userid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Пользователь',
 			`todoid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Исходное дело',
-			`dependsid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Зависит от этого дела',
-			UNIQUE KEY `depends` (`todoid`, `dependsid`)
+			`dependid` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Зависит от этого дела',
+			`dateline` int(10) unsigned NOT NULL DEFAULT 0 COMMENT 'Дата создания',
+			UNIQUE KEY `depends` (`todoid`, `dependid`),
+			KEY (`userid`)
 		)".$charset
 	);
+}
+
+/* * * * Ниже схема не применяется - в разработке * * * */
+
+if ($updateManager->isUpdate('0.1.2')){
 	
 	// Группа тегов
 	$db->query_write("
