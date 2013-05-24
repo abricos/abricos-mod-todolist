@@ -19,6 +19,7 @@ Component.entryPoint = function(NS){
 	
 	var TodoListWidget = function(container, cfg){
 		cfg = L.merge({
+			'onGroupClick': null
 		}, cfg || {});
 		
 		TodoListWidget.superclass.constructor.call(this, container, {
@@ -27,7 +28,7 @@ Component.entryPoint = function(NS){
 	};
 	YAHOO.extend(TodoListWidget, BW, {
 		init: function(cfg){
-			this.config = cfg;
+			this.cfg = cfg;
 			this.wsList = [];
 			
 			this.newEditorWidget = null;
@@ -70,6 +71,7 @@ Component.entryPoint = function(NS){
 
 				elList.appendChild(div);
 				var w = new NS.TodoRowWidget(div, todo, {
+					'onGroupClick': function(w){__self.onGroupClick(w);},
 					'onEditClick': function(w){__self.onTodoEditClick(w);},
 					'onCopyClick': function(w){__self.onTodoCopyClick(w);},
 					'onRemoveClick': function(w){__self.onTodoRemoveClick(w);},
@@ -117,6 +119,13 @@ Component.entryPoint = function(NS){
 					w.editorClose();
 				}
 			});
+		},
+		onGroupClick: function(w){
+			var groupid=0, group = w.todo.getGroup();
+			if (L.isValue(group)){
+				groupid = group.id;
+			}
+			NS.life(this.cfg['onGroupClick'], groupid);
 		},
 		onTodoEditClick: function(w){
 			this.allEditorClose(w);
@@ -173,6 +182,11 @@ Component.entryPoint = function(NS){
 				}else{
 					w.show();
 				}
+				if (groupid > 0){
+					w.groupHide();
+				}else{
+					w.groupShow();
+				}
 			});
 		}
 	});
@@ -180,15 +194,17 @@ Component.entryPoint = function(NS){
 	
 	var TodoRowWidget = function(container, todo, cfg){
 		cfg = L.merge({
+			'onGroupClick': null,
 			'onEditClick': null,
 			'onCopyClick': null,
 			'onRemoveClick': null,
 			'onSelectClick': null,
 			'onSave': null,
-			'onExecute': null
+			'onExecute': null,
+			'groupVisible': false
 		}, cfg || {});
 		TodoRowWidget.superclass.constructor.call(this, container, {
-			'buildTemplate': buildTemplate, 'tnames': 'row' 
+			'buildTemplate': buildTemplate, 'tnames': 'row,grouptl' 
 		}, todo, cfg);
 	};
 	YAHOO.extend(TodoRowWidget, BW, {
@@ -199,10 +215,6 @@ Component.entryPoint = function(NS){
 		},
 		onLoad: function(todo){
 			var __self = this;
-			
-			this.elSetHTML({
-				'tl': NS.textToView(todo.title)
-			});
 			
 			var priority = todo.getPriority(), color = "";
 			if (!L.isValue(priority)){
@@ -229,6 +241,18 @@ Component.entryPoint = function(NS){
 				});
 			});
 		},
+		render: function(){
+			var todo = this.todo, group = todo.getGroup();
+			var stl = todo.title;
+			
+			if (this.cfg['groupVisible'] && L.isValue(group)){
+				stl = this._TM.replace('grouptl', {'tl': group.title})+' / '+stl;
+			}
+			
+			this.elSetHTML({
+				'tl': NS.textToView(stl)
+			});
+		},
 		onClick: function(el, tp){
 			switch(el.id){
 			case tp['bedit']: case tp['beditc']:
@@ -237,8 +261,14 @@ Component.entryPoint = function(NS){
 			case tp['bremove']: case tp['bremovec']:
 				this.onRemoveClick();
 				return true;
+			case this._TId['grouptl']['id']:
+				this.onGroupClick();
+				return true;
 			}
 			return false;
+		},
+		onGroupClick: function(){
+			NS.life(this.cfg['onGroupClick'], this);
 		},
 		onEditClick: function(){
 			NS.life(this.cfg['onEditClick'], this);
@@ -286,6 +316,14 @@ Component.entryPoint = function(NS){
 		},
 		show: function(){
 			Dom.removeClass(this.gel('id'), 'hide');
+		},
+		groupHide: function(){
+			this.cfg['groupVisible'] = false;
+			this.render();
+		},
+		groupShow: function(){
+			this.cfg['groupVisible'] = true;
+			this.render();
 		},
 		_updateExecuteStatus: function(){
 			if (this.todo.isExecute){

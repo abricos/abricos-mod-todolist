@@ -45,7 +45,7 @@ Component.entryPoint = function(NS){
 			this.elShow('view');
 			var __self = this;
 			
-			this.groupListWidget = new NS.GroupListWidget(this.gel('groplist'), {
+			var glWidget = this.groupListWidget = new NS.GroupListWidget(this.gel('groplist'), {
 				'onSelectedItem': function(groupid){
 					__self.setFilter({'groupid': groupid});
 				},
@@ -57,7 +57,11 @@ Component.entryPoint = function(NS){
 					__self.todoListWidget.renderList();
 				}
 			});
-			this.todoListWidget = new NS.TodoListWidget(this.gel('todolist'));
+			this.todoListWidget = new NS.TodoListWidget(this.gel('todolist'), {
+				'onGroupClick': function(groupid){
+					glWidget.selectGroupById(groupid);
+				}
+			});
 		},
 		onClick: function(el, tp){
 			switch(el.id){
