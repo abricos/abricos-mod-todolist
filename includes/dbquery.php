@@ -276,16 +276,17 @@ class TodoListQuery {
 	/*                       Зависимость дел                     */
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	
-	public static function DependList(Ab_Database $db, $userid){
+	public static function DependList(Ab_Database $db, $userid, $todoid = 0){
 		$sql = "
 			SELECT
-				d.todoid as id,
-				d.dependid as did
+				d.dependid as id,
+				d.todoid as tid
 			FROM ".$db->prefix."todolist t
 			INNER JOIN ".$db->prefix."todolist_depends d ON t.todoid=d.todoid
 			INNER JOIN ".$db->prefix."todolist td ON d.todoid=td.todoid 
 			WHERE t.userid=".bkint($userid)." AND t.deldate=0
 				AND td.userid=".bkint($userid)." AND td.deldate=0 
+				".($todoid>0 ? " AND t.todoid=".bkint($todoid) : "")."
 		";
 		return $db->query_read($sql);
 	}

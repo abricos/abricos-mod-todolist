@@ -101,7 +101,8 @@ Component.entryPoint = function(NS){
 				'dsc': this.gel('dsc').value,
 				'prtid': this.prioritySelectWidget.getValue()|0,
 				'gid': this.groupSelectWidget.getValue()|0,
-				'ptm': this.timeInputWidget.getValue()
+				'ptm': this.timeInputWidget.getValue(),
+				'deps': this.dependsEditorWidget.getSaveData()
 			};
 			
 			this.elHide('btnsc');

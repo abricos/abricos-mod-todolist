@@ -20,6 +20,7 @@ Component.entryPoint = function(NS){
 	
 	var SelectWidget = function(container, list, cfg){
 		cfg = L.merge({
+			'exclude': [],
 			'value': null,
 			'notEmpty': false
 		}, cfg || {});
@@ -41,22 +42,35 @@ Component.entryPoint = function(NS){
 			this.gel('select.id').value = value;
 		},
 		render: function(){
-			var TM = this._TM, value = this._value;
+			var __self = this, TM = this._TM, value = this._value, cfg = this.cfg;
 	
 			var lst = "";
-			if (!this.cfg['notEmpty']){
+			if (!cfg['notEmpty']){
 				lst += TM.replace('optionempty');
 			}
+			
+			var exd = [];
+			if (L.isArray(cfg['exclude'])){
+				exd = cfg['exclude'];
+			}else if (L.isValue(cfg['exclude'])){
+				exd[exd.length] = cfg['exclude'];
+			}
 			this.list.foreach(function(item){
+				for (var i=0;i<exd.length;i++){
+					if (item.id == exd[i]){ return; }
+				}
 				lst += TM.replace('option',{
 					'id': item.id,
-					'tl': item.title
+					'tl': __self.buildTitle(item)
 				});
 			});
 			
 			this.gel('id').innerHTML = TM.replace('select', {'rows': lst});
 			this.setValue(value);
-		}			
+		},
+		buildTitle: function(item){
+			return item.title;
+		}
 	});
 	NS.SelectWidget = SelectWidget;	
 	

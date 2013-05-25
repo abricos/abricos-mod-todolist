@@ -74,6 +74,20 @@ Component.entryPoint = function(NS){
 	YAHOO.extend(DictList, SysNS.ItemList, {});
 	NS.DictList = DictList;
 	
+	
+	var Depend = function(d){
+		Depend.superclass.constructor.call(this, d);
+	};
+	YAHOO.extend(Depend, SysNS.Item, {});
+	NS.Depend = Depend;
+	
+	var DependList = function(d){
+		DependList.superclass.constructor.call(this, d, Depend);
+	};
+	YAHOO.extend(DependList, SysNS.ItemList, {});
+	NS.DependList = DependList;
+	
+	
 	var Priority = function(d){
 		d = L.merge({
 			'tl': '',
@@ -147,11 +161,16 @@ Component.entryPoint = function(NS){
 			'ord': 0,
 			'ptm': 0,
 			'exc': 0,
-			'dl': (new Date()).getTime()/1000
+			'dl': (new Date()).getTime()/1000,
+			'deps': []
 		}, d || {});
 		Todo.superclass.constructor.call(this, d);
 	};
 	YAHOO.extend(Todo, SysNS.Item, {
+		init: function(d){
+			this.dependList = new NS.DependList();
+			Todo.superclass.init.call(this, d);
+		},
 		update: function(d){
 			this.title = d['tl'];
 			this.descript = d['dsc'];
@@ -163,6 +182,9 @@ Component.entryPoint = function(NS){
 			this.executed = d['exc']|0; // время выполнения
 			this.isExecute = this.executed > 0;
 			this.date = d['dl']|0;
+			
+			this.dependList.clear();
+			this.dependList.update(d['deps']);
 			
 			this._cachePriorityId = null;
 			this._cachePriority = null;

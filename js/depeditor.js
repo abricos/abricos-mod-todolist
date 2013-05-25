@@ -43,54 +43,72 @@ Component.entryPoint = function(NS){
 			this.elSetHTML('list', '');
 		},
 		onLoad: function(todo){
-			this.addDependRow();
+			var __self = this;
+			todo.dependList.foreach(function(dep){
+				__self.addDepend(dep);
+			});
 		},
 		onClick: function(el, tp){
 			switch(el.id){
-			case tp['add']: this.addDependRow(); return true;
+			case tp['add']: this.addDepend(); return true;
 			}
 			return false;
 		},
-		renderList: function(){
-			this.clearList();
-			
-		},
-		addDependRow: function(){
+		addDepend: function(dep){
+			dep = dep || new NS.Depend();
 			var div = document.createElement('div');
 			this.gel('list').appendChild(div);
 			
-			var w = new DependRowWidget(div);
+			var w = new DependRowWidget(div, this.todo, dep);
 			this.wsList[this.wsList.length] = w;
+		},
+		getSaveData: function(){
+			var arr = [];
+			var ws = this.wsList;
+			for (var i=0;i<ws.length;i++){
+				arr[arr.length] = ws[i].getValue();
+			}
+			return arr;
 		}
 	});
 	NS.DependsEditorWidget = DependsEditorWidget;
 	
-	var DependRowWidget = function(container, depend, cfg){
+	var DependTodoSelectWidget = function(container, cfg){
+		var list = NS.manager.todoList;
+		DependTodoSelectWidget.superclass.constructor.call(this, container, list, cfg);
+	};
+	YAHOO.extend(DependTodoSelectWidget, NS.SelectWidget, {
+		buildTitle: function(todo){
+			var group = todo.getGroup();
+			if (L.isValue(group)){
+				return group.title + ' / ' + todo.title;
+			}
+			return todo.title;
+		}
+	});
+	NS.DependTodoSelectWidget = DependTodoSelectWidget;
+	
+	var DependRowWidget = function(container, todo, dep, cfg){
 		cfg = L.merge({
 		}, cfg || {});
 		DependRowWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'row' 
-		}, depend, cfg);
+		}, todo, dep, cfg);
 	};
 	YAHOO.extend(DependRowWidget, BW, {
-		init: function(depend, cfg){
-			
+		init: function(todo, dep, cfg){
+			this.todo = todo;
+			this.dep = dep;
 		},
 		onLoad: function(){
-			this.selectWidget = new DependTodoSelectWidget(this.gel('select'));
+			this.selectWidget = new DependTodoSelectWidget(this.gel('select'), {
+				'exclude': this.todo.id
+			});
+		},
+		getValue: function(){
+			return this.selectWidget.getValue();
 		}
 	});
 	NS.DependRowWidget = DependRowWidget;
 	
-	var DependTodoSelectWidget = function(container, cfg){
-		cfg = L.merge({
-		}, cfg || {});
-		
-		var list = NS.manager.todoList;
-		
-		DependTodoSelectWidget.superclass.constructor.call(this, container, list, cfg);
-	};
-	YAHOO.extend(DependTodoSelectWidget, NS.SelectWidget, {});
-	NS.DependTodoSelectWidget = DependTodoSelectWidget;
-
 };

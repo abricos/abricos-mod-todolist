@@ -61,7 +61,7 @@ class TodoListManager extends Ab_ModuleManager {
 			case "todosave": return $this->TodoSaveToAJAX($d->todoid, $d->savedata);
 			case "todoexecute": return $this->TodoExecuteToAJAX($d->todoid, $d->isexecute);
 			case "todoremove": return $this->TodoRemove($d->todoid);
-			case "dependlist": return $this->DependListToAJAX();
+			// case "dependlist": return $this->DependListToAJAX();
 		}
 
 		return null;
@@ -83,9 +83,6 @@ class TodoListManager extends Ab_ModuleManager {
 
 		$obj = $this->TodoListToAJAX();
 		$ret->todos = $obj->todos;
-
-		$obj = $this->DependListToAJAX();
-		$ret->depends = $obj->depends;
 		
 		return $ret;
 	}
@@ -265,6 +262,9 @@ class TodoListManager extends Ab_ModuleManager {
 		while (($d = $this->db->fetch_array($rows))){
 			$list->Add(new TodoItem($d));
 		}
+		
+		$this->TodoDependsFill($list);
+		
 		return $list;
 	}
 	
@@ -282,8 +282,30 @@ class TodoListManager extends Ab_ModuleManager {
 	
 		$d = TodoListQuery::Todo($this->db, $this->userid, $todoid);
 		if (empty($d)){ return null; }
+		
+		$todo = new TodoItem($d);
+		
+		$list = new TodoList();
+		$list->Add($todo);
+		
+		$this->TodoDependsFill($list);
 	
-		return new TodoItem($d);
+		return $todo;
+	}
+	
+	protected function TodoDependsFill(TodoList $list){
+		$todoid = 0;
+		if ($list->Count() == 1){
+			$todoid = $list->GetByIndex(0)->id;
+		}
+		
+		$rows = TodoListQuery::DependList($this->db, $this->userid, $todoid);
+		
+		while (($d = $this->db->fetch_array($rows))){
+			$todo = $list->Get($d['tid']);
+			if (empty($todo)){ continue; }
+			$todo->dependList->Add(new TodoDepend($d));
+		}
 	}
 	
 	public function TodoToAJAX($todoid){
@@ -344,10 +366,8 @@ class TodoListManager extends Ab_ModuleManager {
 		TodoListQuery::TodoRemove($this->db, $this->userid, $todoid);
 		return true;
 	}
-	
-	/**
-	 * @return TodoDependList
-	 */
+
+	/*
 	public function DependList(){
 		if (!$this->IsViewRole()){ return null; }
 		
@@ -376,6 +396,7 @@ class TodoListManager extends Ab_ModuleManager {
 		
 		return $ret;
 	}
+	/**/
 	
 	public function ParamToObject($o){
 		if (is_array($o)){

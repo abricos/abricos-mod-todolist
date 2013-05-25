@@ -97,6 +97,9 @@ class TodoTag extends AbricosItem {
 }
 class TodoTagList extends AbricosList { }
 
+/**
+ * Дело
+ */
 class TodoItem extends AbricosItem {
 	
 	public $title;
@@ -108,6 +111,12 @@ class TodoItem extends AbricosItem {
 	public $executed;
 	public $isExecute;
 	public $date;
+	
+	/**
+	 * Список дел от которых зависит это дело
+	 * @var TodoDependList
+	 */
+	public $dependList;
 	
 	public function __construct($d){
 		parent::__construct($d);
@@ -121,6 +130,8 @@ class TodoItem extends AbricosItem {
 		$this->executed = intval($d['exc']);
 		$this->isExecute = $this->executed > 0;
 		$this->date = intval($d['dl']);
+		
+		$this->dependList = new TodoDependList();
 	}
 	
 	public function ToAJAX(){
@@ -134,37 +145,26 @@ class TodoItem extends AbricosItem {
 		$ret->exc = $this->executed;
 		$ret->dl = $this->date;
 		
-		return $ret;
-	}
-}
-
-class TodoList extends AbricosList { }
-
-class TodoDepend extends AbricosItem {
-	
-	public $depends = array();
-	
-	public function __construct($d){
-		parent::__construct($d);
+		if ($this->dependList->Count() > 0){
+			$obj = $this->dependList->ToAJAX();
+			$ret->deps = $obj->list;
+		}
 		
-		$this->AddTodoDepend($d['did']);
-	}
-	
-	/**
-	 * Добавить зависимость от дела
-	 * @param integer $todoid
-	 */
-	public function AddTodoDepend($todoid){
-		array_push($this->depends, $todoid);
-	}
-	
-	public function ToAJAX(){
-		$ret = parent::ToAJAX();
-		$ret->deps = $this->depends;
 		return $ret;
 	}
 }
 
+class TodoList extends AbricosList {
+
+	/**
+	 * @return TodoItem
+	 */
+	public function Get($id){
+		return parent::Get($id);
+	}
+}
+
+class TodoDepend extends AbricosItem { }
 class TodoDependList extends AbricosList { }
 
 class TodoListUserConfig {
