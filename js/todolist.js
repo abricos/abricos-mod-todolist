@@ -201,7 +201,8 @@ Component.entryPoint = function(NS){
 			'onSelectClick': null,
 			'onSave': null,
 			'onExecute': null,
-			'groupVisible': false
+			'groupVisible': false,
+			'detailVisible': false
 		}, cfg || {});
 		TodoRowWidget.superclass.constructor.call(this, container, {
 			'buildTemplate': buildTemplate, 'tnames': 'row,grouptl' 
@@ -250,8 +251,15 @@ Component.entryPoint = function(NS){
 			}
 			
 			this.elSetHTML({
-				'tl': NS.textToView(stl)
+				'tl': NS.textToView(stl),
+				'desc': todo.descript
 			});
+			
+			if (this.cfg['detailVisible'] && !L.isValue(this.editorWidget)){
+				this.elShow('detail');
+			}else{
+				this.elHide('detail');
+			}
 		},
 		onClick: function(el, tp){
 			switch(el.id){
@@ -265,7 +273,11 @@ Component.entryPoint = function(NS){
 				this.onGroupClick();
 				return true;
 			}
-			return false;
+			
+			// this.cfg['detailVisible'] = !this.cfg['detailVisible'];
+			// this.render();
+			
+			return true;
 		},
 		onGroupClick: function(){
 			NS.life(this.cfg['onGroupClick'], this);
@@ -300,6 +312,7 @@ Component.entryPoint = function(NS){
 			Dom.addClass(this.gel('wrap'), 'rborder');
 			Dom.addClass(this.gel('id'), 'rowselect');
 			this.elHide('menu');
+			this.render();
 		},
 		editorClose: function(){
 			if (L.isNull(this.editorWidget)){ return; }
@@ -310,6 +323,7 @@ Component.entryPoint = function(NS){
 
 			this.editorWidget.destroy();
 			this.editorWidget = null;
+			this.render();
 		},
 		hide: function(){
 			Dom.addClass(this.gel('id'), 'hide');
@@ -323,6 +337,14 @@ Component.entryPoint = function(NS){
 		},
 		groupShow: function(){
 			this.cfg['groupVisible'] = true;
+			this.render();
+		},
+		detailHide: function(){
+			this.cfg['detailVisible'] = false;
+			this.render();
+		},
+		detailShow: function(){
+			this.cfg['detailVisible'] = true;
 			this.render();
 		},
 		_updateExecuteStatus: function(){

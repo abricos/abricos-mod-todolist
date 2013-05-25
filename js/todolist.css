@@ -32,8 +32,9 @@
     white-space: nowrap;
     overflow: hidden;
 }
-.aw-todolist .todolist .elrow .executed {
-	font-style: italic;
+/* * * Детально * * */
+.aw-todolist .todolist .elrow .detail {
+	padding: 0 10px 10px 23px;
 }
 
 .aw-todolist .todolist .elrow .shadow {
@@ -49,6 +50,10 @@
 .aw-todolist .todolist .elrow .rborder {
 	border: 1px solid #D1D3DC;
 	border-radius: 5px;
+}
+
+.aw-todolist .todolist .elrow .executed {
+	font-style: italic;
 }
 
 /* * * Menu * * */

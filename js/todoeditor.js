@@ -7,7 +7,7 @@ var Component = new Brick.Component();
 Component.requires = {
 	mod:[
 		{name: 'sys', files: ['editor.js']},
-		{name: '{C#MODNAME}', files: ['widgets.js', 'lib.js']}
+		{name: '{C#MODNAME}', files: ['depeditor.js']}
 	]
 };
 Component.entryPoint = function(NS){
@@ -54,6 +54,8 @@ Component.entryPoint = function(NS){
 			this.prioritySelectWidget = new NS.SelectWidget(this.gel('priorityselect'), NS.manager.priorityList, {
 				'value': todo.priorityid
 			});
+			
+			this.dependsEditorWidget = new NS.DependsEditorWidget(this.gel('depends'), todo);
 
 			this.timeInputWidget = new NS.TimeInputWidget(this.gel('time'), {
 				'value': todo.plantime

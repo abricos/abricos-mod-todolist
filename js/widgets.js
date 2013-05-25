@@ -120,6 +120,6 @@ Component.entryPoint = function(NS){
 			this.gel('input').value = value;
 		}
 	});
-	NS.TimeInputWidget = TimeInputWidget;	
+	NS.TimeInputWidget = TimeInputWidget;
 	
 };
