@@ -214,17 +214,22 @@ Component.entryPoint = function(NS){
 		
 		_fillDepends: function(deps){ // рекурсивный метод заполнения массива
 			deps = deps || {};
-			
+
 			this.dependList.foreach(function(dep){
-				deps[deps.id] = true;
+				deps[dep.id] = {
+					'fill': false
+				};
 			});
-			
+
 			for (var id in deps){
 				if (id == this.id){ continue; }
+				var dep = deps[id];
+				if (dep.fill){ continue; }
+				dep.fill = true;
 				
 				var todo = NS.manager.todoList.get(id);
 				if (!L.isValue(todo)){ continue; }
-				
+
 				todo._fillDepends(deps);
 			}
 		},
@@ -245,15 +250,14 @@ Component.entryPoint = function(NS){
 			}
 			
 			this._cacheFullDepends = ret;
-			
+	
 			return ret;
 		},
-		checkTodoDepend: function(todoid){ // проверить - зависит ли это дело от todoid
+		checkDepend: function(todoid){ // проверить - зависит ли это дело от todoid
 			var ids = this.getFullDepends();
 			for (var i=0;i<ids.length;i++){
 				if (ids[i] == todoid){ return true; }
 			}
-			
 			return false;
 		},
 		getFullChilds: function(){ // список всех зависимых дел от этого дела
@@ -265,8 +269,8 @@ Component.entryPoint = function(NS){
 			NS.manager.todoList.foreach(function(todo){
 				if (todo.id == id){ return; }
 				
-				if (todo.checkTodoDepend(id)){
-					ret[ret.length] = todo.id
+				if (todo.checkDepend(id)){
+					ret[ret.length] = todo.id;
 				}
 			});
 			this._cacheChilds = ret;
@@ -278,7 +282,10 @@ Component.entryPoint = function(NS){
 	var todoListOrder = function(t1, t2){
 		if (!t1.isExecute && t2.isExecute){ return -1; }
 		if (t1.isExecute && !t2.isExecute){ return 1; }
-		
+
+		if (t1.checkDepend(t2.id)){ return 1; }
+		if (t2.checkDepend(t1.id)){ return -1; }
+
 		var p1 = t1.getPriority(),
 			p2 = t2.getPriority();
 		var po1 = L.isValue(p1) ? p1.order : 0,
@@ -456,6 +463,10 @@ Component.entryPoint = function(NS){
 			}
 			this.todoList.update(d['todos']['list']);
 			this._todoCountInGroupCalculate();
+			
+			// var todo = this.todoList.get(4);
+			// var deps = todo.getFullDepends();
+			// Brick.console(deps);
 		},
 		todoListLoad: function(callback){
 			var __self = this;

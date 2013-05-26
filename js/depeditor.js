@@ -107,7 +107,7 @@ Component.entryPoint = function(NS){
 			
 			var exclude = todo.getFullChilds();
 			exclude[exclude.length] = todo.id;
-
+			
 			this.selectWidget = new DependTodoSelectWidget(this.gel('select'), {
 				'value': dep.id,
 				'exclude': exclude
