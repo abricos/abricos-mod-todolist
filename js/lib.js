@@ -191,6 +191,9 @@ Component.entryPoint = function(NS){
 			
 			this._cacheGroupId = null;
 			this._cacheGroup = null;
+			
+			this._cacheFullDepends = null;
+			this._cacheChilds = null;
 		},
 		getPriority: function(){
 			if (this._cachePriorityId == this.priorityid){
@@ -207,6 +210,67 @@ Component.entryPoint = function(NS){
 			this._cacheGroupId = this.groupid;
 			this._cacheGroup = NS.manager.groupList.get(this.groupid);
 			return this._cacheGroup;
+		},
+		
+		_fillDepends: function(deps){ // рекурсивный метод заполнения массива
+			deps = deps || {};
+			
+			this.dependList.foreach(function(dep){
+				deps[deps.id] = true;
+			});
+			
+			for (var id in deps){
+				if (id == this.id){ continue; }
+				
+				var todo = NS.manager.todoList.get(id);
+				if (!L.isValue(todo)){ continue; }
+				
+				todo._fillDepends(deps);
+			}
+		},
+		getFullDepends: function(){ // список всех дел от которых зависит это дело, включая самые верхнии
+			if (L.isValue(this._cacheFullDepends)){
+				return this._cacheFullDepends;
+			}
+			var ret = [], deps = {};
+			
+			this._fillDepends(deps);
+
+			for (var id in deps){
+				if (id == this.id){ continue; }
+
+				var todo = NS.manager.todoList.get(id);
+				if (!L.isValue(todo)){ continue; }
+				ret[ret.length] = id;
+			}
+			
+			this._cacheFullDepends = ret;
+			
+			return ret;
+		},
+		checkTodoDepend: function(todoid){ // проверить - зависит ли это дело от todoid
+			var ids = this.getFullDepends();
+			for (var i=0;i<ids.length;i++){
+				if (ids[i] == todoid){ return true; }
+			}
+			
+			return false;
+		},
+		getFullChilds: function(){ // список всех зависимых дел от этого дела
+			if (L.isValue(this._cacheChilds)){ 
+				return this._cacheChilds;
+			}
+			
+			var id = this.id, ret = [];
+			NS.manager.todoList.foreach(function(todo){
+				if (todo.id == id){ return; }
+				
+				if (todo.checkTodoDepend(id)){
+					ret[ret.length] = todo.id
+				}
+			});
+			this._cacheChilds = ret;
+			return ret;
 		}
 	});
 	NS.Todo = Todo;

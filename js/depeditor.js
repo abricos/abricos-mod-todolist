@@ -104,9 +104,13 @@ Component.entryPoint = function(NS){
 			this.dep = dep;
 		},
 		onLoad: function(todo, dep, cfg){
+			
+			var exclude = todo.getFullChilds();
+			exclude[exclude.length] = todo.id;
+
 			this.selectWidget = new DependTodoSelectWidget(this.gel('select'), {
 				'value': dep.id,
-				'exclude': todo.id
+				'exclude': exclude
 			});
 		},
 		getSaveData: function(){

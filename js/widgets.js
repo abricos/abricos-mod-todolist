@@ -59,9 +59,13 @@ Component.entryPoint = function(NS){
 				for (var i=0;i<exd.length;i++){
 					if (item.id == exd[i]){ return; }
 				}
+				var tl  = __self.buildTitle(item);
+				if (tl.length > 80){
+					tl = tl.substring(0, 80)+'...';
+				}
 				lst += TM.replace('option',{
 					'id': item.id,
-					'tl': __self.buildTitle(item)
+					'tl': tl
 				});
 			});
 			

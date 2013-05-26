@@ -344,7 +344,7 @@ class TodoListManager extends Ab_ModuleManager {
 		TodoListQuery::DependClear($this->db, $this->userid, $todoid);
 		if (is_array($sd->deps)){
 			foreach($sd->deps as $dep){
-				if (empty($dep->id)){ continue; }
+				if (empty($dep->id) || $dep->id == $todoid){ continue; }
 				TodoListQuery::DependAppend($this->db, $this->userid, $todoid, $dep->id);
 			}
 		}
