@@ -61,7 +61,6 @@ class TodoListManager extends Ab_ModuleManager {
 			case "todosave": return $this->TodoSaveToAJAX($d->todoid, $d->savedata);
 			case "todoexecute": return $this->TodoExecuteToAJAX($d->todoid, $d->isexecute);
 			case "todoremove": return $this->TodoRemove($d->todoid);
-			// case "dependlist": return $this->DependListToAJAX();
 		}
 
 		return null;
@@ -98,17 +97,17 @@ class TodoListManager extends Ab_ModuleManager {
 			// пользователь первый раз запускает модуль, необходимо заполнить таблицы для него
 			TodoListQuery::UserConfigAppend($this->db, $this->userid);
 
-			$this->PrioritySave(0, $this->ParamToObject(array(
+			$this->PrioritySave(0, $this->ArrayToObject(array(
 				"tl" => "Срочный",
 				"ord" => 3,
 				"clr" => "#974554"
 			)));
-			$this->PrioritySave(0, $this->ParamToObject(array(
+			$this->PrioritySave(0, $this->ArrayToObject(array(
 				"tl" => "Нормальный",
 				"ord" => 2,
 				"def" => 1
 			)));
-			$this->PrioritySave(0, $this->ParamToObject(array(
+			$this->PrioritySave(0, $this->ArrayToObject(array(
 				"tl" => "Не важный",
 				"ord" => 1,
 				"clr" => "#56975D"
@@ -341,6 +340,15 @@ class TodoListManager extends Ab_ModuleManager {
 			TodoListQuery::TodoUpdate($this->db, $this->userid, $todoid, $sd);
 		}
 		
+		// обновить зависимости
+		TodoListQuery::DependClear($this->db, $this->userid, $todoid);
+		if (is_array($sd->deps)){
+			foreach($sd->deps as $dep){
+				if (empty($dep->id)){ continue; }
+				TodoListQuery::DependAppend($this->db, $this->userid, $todoid, $dep->id);
+			}
+		}
+		
 		return $todoid;
 	}
 	
@@ -366,39 +374,8 @@ class TodoListManager extends Ab_ModuleManager {
 		TodoListQuery::TodoRemove($this->db, $this->userid, $todoid);
 		return true;
 	}
-
-	/*
-	public function DependList(){
-		if (!$this->IsViewRole()){ return null; }
-		
-		$rows = TodoListQuery::DependList($this->db, $this->userid);
-
-		$list = new TodoDependList();
-		while (($d = $this->db->fetch_array($rows))){
-			
-			$depend = $list->Get($d['id']);
-			if (empty($depend)){
-				$depend = new TodoDepend($d);
-				$list->Add($depend);
-			}else{
-				$depend->AddTodoDepend($d['did']);
-			}
-		}
-		return $list;
-	}
 	
-	public function DependListToAJAX(){
-		$list = $this->DependList();
-		if (empty($list)){ return null; }
-		
-		$ret = new stdClass();
-		$ret->depends = $list->ToAJAX();
-		
-		return $ret;
-	}
-	/**/
-	
-	public function ParamToObject($o){
+	public function ArrayToObject($o){
 		if (is_array($o)){
 			$ret = new stdClass();
 			foreach($o as $key => $value){

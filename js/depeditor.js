@@ -56,6 +56,7 @@ Component.entryPoint = function(NS){
 		},
 		addDepend: function(dep){
 			dep = dep || new NS.Depend();
+			
 			var div = document.createElement('div');
 			this.gel('list').appendChild(div);
 			
@@ -66,7 +67,9 @@ Component.entryPoint = function(NS){
 			var arr = [];
 			var ws = this.wsList;
 			for (var i=0;i<ws.length;i++){
-				arr[arr.length] = ws[i].getValue();
+				var d = ws[i].getSaveData();
+				if (!L.isValue(d)){ continue; }
+				arr[arr.length] = d;
 			}
 			return arr;
 		}
@@ -100,13 +103,17 @@ Component.entryPoint = function(NS){
 			this.todo = todo;
 			this.dep = dep;
 		},
-		onLoad: function(){
+		onLoad: function(todo, dep, cfg){
 			this.selectWidget = new DependTodoSelectWidget(this.gel('select'), {
-				'exclude': this.todo.id
+				'value': dep.id,
+				'exclude': todo.id
 			});
 		},
-		getValue: function(){
-			return this.selectWidget.getValue();
+		getSaveData: function(){
+			var id = this.selectWidget.getValue()|0;
+			if (id == 0){ return null; }
+			
+			return {'id': id};
 		}
 	});
 	NS.DependRowWidget = DependRowWidget;

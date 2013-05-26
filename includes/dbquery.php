@@ -312,6 +312,14 @@ class TodoListQuery {
 		";
 		$db->query_write($sql);
 	}
+
+	public static function DependClear(Ab_Database $db, $userid, $todoid){
+		$sql = "
+			DELETE FROM ".$db->prefix."todolist_depends
+			WHERE userid=".bkint($userid)." AND todoid=".bkint($todoid)."
+		";
+		$db->query_write($sql);
+	}
 	
 	/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 	/*                            Теги                           */
