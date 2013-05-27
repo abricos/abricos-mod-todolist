@@ -274,10 +274,7 @@ Component.entryPoint = function(NS){
 				return true;
 			}
 			
-			// this.cfg['detailVisible'] = !this.cfg['detailVisible'];
-			// this.render();
-			
-			return true;
+			return false;
 		},
 		onGroupClick: function(){
 			NS.life(this.cfg['onGroupClick'], this);
