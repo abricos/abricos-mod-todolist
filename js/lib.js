@@ -507,6 +507,7 @@ Component.entryPoint = function(NS){
 		_todoCountInGroupCalculate: function(){
 			var gs = {};
 			this.todoList.foreach(function(todo){
+				if (todo.isExecute){ return; }
 				var gid = todo.groupid|0;
 				gs[gid] = (gs[gid]|0)+1;
 			});
