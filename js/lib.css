@@ -186,3 +186,27 @@
 .aw-todolist .boxbutton .bremove {
 	background: url("/modules/todolist/images/icons.png") no-repeat scroll -42px -24px transparent;
 }
+
+/* * * Select Button * * */
+.aw-todolist .selbuttons a.sbitem {
+	display: block;
+	float: left;
+	padding: 5px 10px;
+	border-radius: 5px;
+	border: 1px solid #D1D3DC;
+	margin-right: 7px;
+	margin-bottom: 5px;
+	text-decoration: none;
+	color: #888FAA;
+	background-color: #F3F4F7;
+}
+.aw-todolist .selbuttons a.select {
+	background-color: #FFDE85;
+	border: 1px solid #FFC933;
+}
+.aw-todolist .selbuttons a.sbitem:hover {
+	text-decoration: underline;
+}
+.aw-todolist .selbuttons a.select:hover {
+	text-decoration: none;
+}
