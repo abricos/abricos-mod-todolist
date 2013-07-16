@@ -7,7 +7,7 @@ var Component = new Brick.Component();
 Component.requires = {
 	mod:[
 		{name: 'sys', files: ['editor.js']},
-		{name: '{C#MODNAME}', files: ['depeditor.js']}
+		{name: '{C#MODNAME}', files: ['priority.js','depeditor.js']}
 	]
 };
 Component.entryPoint = function(NS){
@@ -50,8 +50,8 @@ Component.entryPoint = function(NS){
 			this.groupSelectWidget = new NS.SelectWidget(this.gel('groupselect'), NS.manager.groupList, {
 				'value': todo.groupid
 			});
-
-			this.prioritySelectWidget = new NS.SelectWidget(this.gel('priorityselect'), NS.manager.priorityList, {
+			
+			this.prioritySelectWidget = new NS.PrioritySelectWidget(this.gel('priorityselect'), {
 				'value': todo.priorityid
 			});
 			

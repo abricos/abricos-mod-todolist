@@ -18,3 +18,7 @@
 	background-color: #FFF0C6;
 	padding: 8px 8px 0px 8px;
 }
+
+.aw-todolist .todoeditor .priority dd {
+	padding-bottom: 0px;
+}
