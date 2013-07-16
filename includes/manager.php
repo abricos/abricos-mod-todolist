@@ -217,7 +217,7 @@ class TodoListManager extends Ab_ModuleManager {
 		$d = TodoListQuery::Group($this->db, $this->userid, $groupid);
 		if (empty($d)){ return null; }
 	
-		return new TodoItem($d);
+		return new TodoGroup($d);
 	}
 	
 	public function GroupSaveToAJAX($groupid, $sd){
