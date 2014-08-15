@@ -412,7 +412,22 @@ class TodoListManager extends Ab_ModuleManager {
 		}
 		return $ret;
 	}
-	
+
+    public function Bos_MenuData() {
+        if (!$this->IsViewRole()) {
+            return null;
+        }
+        $lng = $this->module->lang;
+        return array(
+            array(
+                "name" => "todolist",
+                "title" => $lng['bosmenu']['todolist'],
+                "icon" => "/modules/todolist/images/logo-48x48.png",
+                "url" => "todolist/wspace/ws/"
+            )
+        );
+    }
+
 }
 
 ?>

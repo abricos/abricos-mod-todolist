@@ -1,37 +1,45 @@
 <!--{widget}-->
 <div id="{i#id}" class="manager">
 
-	<div id="{i#loading}" class="loading">
-		<img src="/images/loading.gif" /> Идет загрузка данных <br /> Пожалуйста, подождите...
-	</div>
+    <div id="{i#loading}" class="loading">
+        <img src="/images/loading.gif"/> Идет загрузка данных <br/> Пожалуйста, подождите...
+    </div>
 
-	<div id="{i#view}" style="display: none">
-		<table class="brdtable"><tbody><tr>
-			<td class="brdlcol">
-				<div class="brdcolhd">
-					<span>Разделы</span>
-					
-					<div id="{i#menu}" class="boxbutton">
-						<div id="{i#baddgroup}" class="b" title="Добавить раздел">
-							<div id="{i#baddgroupc}" class="badd bc"></div>
-						</div>
-					</div>
-				</div>
-				<div id="{i#groplist}"></div>
-			</td>
-			<td class="brdrcol">
-				<div class="manbtns">
-					<div class="lft">
-						<span id="{i#filterbtns}" style="display: none">
-							Фильтр: <span id="{i#grouptl}"></span> 
-							(<a id="{i#bclearfilter}" href="#" class="habtn bclearfilter">показать все</a>)
-						</span>
-					</div>
-					<a id="{i#baddtodo}" href="#" class="habtn">Добавить дело</a>
-				</div>
-				
-				<div id="{i#todolist}"></div>
-			</td>
-		</tr></tbody></table>
-	</div>
+    <div id="{i#view}" style="display: none" class="row">
+
+        <div class="col-md-3">
+
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <span>Разделы</span>
+
+                    <div id="{i#menu}" class="boxbutton">
+                        <div id="{i#baddgroup}" class="b" title="Добавить раздел">
+                            <div id="{i#baddgroupc}" class="badd bc"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div id="{i#groplist}"></div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-9">
+            <div class="manbtns">
+                <div class="lft">
+                    <span id="{i#filterbtns}" style="display: none">
+                        Фильтр: <span id="{i#grouptl}"></span> &nbsp;
+                        (<a id="{i#bclearfilter}" href="#" class="habtn bclearfilter">показать все</a>)
+                    </span>
+                </div>
+                <a id="{i#baddtodo}" href="#" class="habtn">+ Добавить дело</a>
+            </div>
+
+            <div id="{i#todolist}"></div>
+
+        </div>
+    </div>
 </div>
+

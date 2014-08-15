@@ -17,7 +17,7 @@ class TodoListModule extends Ab_Module {
 	
 	public function TodoListModule(){
 		// версия модуля
-		$this->version = "0.1.1";
+		$this->version = "0.1.2";
 
 		// имя модуля 
 		$this->name = "todolist";
@@ -44,6 +44,9 @@ class TodoListModule extends Ab_Module {
 		return "";
 	}
 
+    public function Bos_IsMenu(){
+        return true;
+    }
 }
 
 class TodoListAction {

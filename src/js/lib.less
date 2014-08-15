@@ -1,0 +1,229 @@
+.aw-todolist {
+
+  input[type=checkbox]{
+    margin: 0;
+  }
+
+  .clear {
+    clear: both;
+  }
+  .loading,
+  .nullitem {
+    text-align: center;
+    padding: 70px 0;
+  }
+
+  .pagetl {
+    color: #333333;
+    font-size: 1.28em;
+    font-weight: bold;
+    padding-bottom: 0.5em;
+
+    font-weight: normal !important;
+  }
+
+  /* * * * * * AHref Button * * * * */
+  a.habtn {
+    border-bottom: 1px dotted;
+    text-decoration: none;
+    margin: 0 5px;
+  }
+  a.warn {
+    color: #DA4242;
+  }
+
+  /* * * * Превьюшки * * * * */
+  .tmb24 {
+    width: 24px;
+    height: 24px;
+  }
+  .tmb24 img {
+    max-width: 24px;
+    max-height: 24px;
+  }
+
+  .tmb {
+    display: table;
+  }
+  .tmb .tmbpre {
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .tmb .tmbpre img {
+    display: block;
+    margin: 0 auto;
+  }
+
+  /* * * * * * * * * * Editor Form * * * * * * * */
+  .editform {
+    padding: 10px 0;
+  }
+  .editform .dsc,
+  .viewform .dsc {
+    color: #555555;
+    font-size: .9em;
+    /* width: 400px; /**/
+  }
+
+  .editform h3,
+  .viewform h3 {
+    color: #333333;
+    font-size: 1.28em;
+    font-weight: bold;
+    padding-bottom: 0.5em;
+
+    font-weight: normal !important;
+  }
+  .editform h4,
+  .viewform h4 {
+    margin-bottom: 10px;
+    font-weight: bold;
+  }
+  .editform .group,
+  .viewform .group {
+    margin: 0 20px;
+    border-bottom: 1px solid #E3E3D7;
+    margin-bottom: 1em;
+    padding-bottom: .8em;
+  }
+  .editform .fieldline {
+    margin-bottom: 10px;
+  }
+  .editform dl,
+  .viewform dl {
+    margin: 0 0 0.3em;
+    padding: 0;
+    clear: both;
+  }
+  .editform dt,
+  .viewform dt {
+    float: left;
+    padding: 0.5em 0 0.5em 0;
+    width: 12em;
+  }
+  .viewform dt {
+    text-align: right;
+    color: #999999;
+  }
+
+  .editform dd,
+  .viewform dd {
+    float: none;
+    margin-left: 13em;
+    padding: 0.5em 0;
+  }
+  .editform p {
+    margin: 5px 0 7px;
+  }
+  .editform input.inp,
+  .editform select.inp,
+  .editform textarea.inp {
+    border: 1px solid #ACAEB4;
+    border-radius: 3px 3px 3px 3px;
+    line-height: 20px;
+    padding: 3px;
+    width: 400px;
+  }
+  .editform select.inp {
+    width: 407px;
+    padding: 2px;
+  }
+  .editform textarea.inp {
+    height: 100px;
+  }
+  .editform .baction {
+    margin-top: 10px;
+    margin-right: 2em;
+  }
+  .editform .baction input {
+    margin-right: 10px;
+    padding: 2px 5px;
+  }
+  .editform .baction .error {
+    color: red;
+    margin-right: 10px;
+  }
+
+  /* * * Box Buttons * * */
+  .boxbutton {
+    border: 1px solid #dadada;
+    border-right: none;
+
+    .b {
+      background-color: #fff;
+      cursor: pointer;
+      padding-left: 3px;
+      padding-top: 3px;
+      width: 18px;
+      height: 18px;
+      float: left;
+      border-right: 1px solid #dadada;
+    }
+    .bm {
+      padding-left: 1px !important;
+      padding-top: 1px !important;
+    }
+    .b:hover {
+      background-color: #FFF0C6;
+    }
+    .bc {
+      width: 12px;
+      height: 14px;
+    }
+    .bgo {
+      background: url("/modules/todolist/images/icons.png") no-repeat scroll -20px -39px transparent;
+    }
+    .border {
+      background: url("/modules/todolist/images/icons.png?b=0.1") no-repeat scroll -47px -38px transparent;
+      width: 16px;
+      height: 17px;
+    }
+    .bgopage {
+      background: url("/modules/todolist/images/icons.png") no-repeat scroll -20px -39px transparent;
+    }
+    .badd {
+      background: url("/modules/todolist/images/icons.png") no-repeat scroll -57px -24px transparent;
+    }
+    .bedit {
+      background: url("/modules/todolist/images/icons.png") no-repeat scroll -29px -24px transparent;
+    }
+    .bcp {
+      padding-left: 4px !important;
+      padding-top: 3px !important;
+    }
+    .bcopy {
+      background: url("/modules/todolist/images/icons.png") no-repeat scroll -66px -39px transparent;
+      width: 14px;
+      height: 15px;
+    }
+    .bremove {
+      background: url("/modules/todolist/images/icons.png") no-repeat scroll -42px -24px transparent;
+    }
+
+  }
+
+  /* * * Select Button * * */
+  .selbuttons a.sbitem {
+    display: block;
+    float: left;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid #D1D3DC;
+    margin-right: 7px;
+    margin-bottom: 5px;
+    text-decoration: none;
+    color: #888FAA;
+    background-color: #F3F4F7;
+  }
+  .selbuttons a.select {
+    background-color: #FFDE85;
+    border: 1px solid #FFC933;
+  }
+  .selbuttons a.sbitem:hover {
+    text-decoration: underline;
+  }
+  .selbuttons a.select:hover {
+    text-decoration: none;
+  }
+
+}
