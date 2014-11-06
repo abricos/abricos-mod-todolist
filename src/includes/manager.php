@@ -417,11 +417,11 @@ class TodoListManager extends Ab_ModuleManager {
         if (!$this->IsViewRole()) {
             return null;
         }
-        $lng = $this->module->lang;
+        $i18n = $this->module->GetI18n();
         return array(
             array(
                 "name" => "todolist",
-                "title" => $lng['bosmenu']['todolist'],
+                "title" => $i18n['bosmenu']['todolist'],
                 "icon" => "/modules/todolist/images/logo-48x48.png",
                 "url" => "todolist/wspace/ws/"
             )
