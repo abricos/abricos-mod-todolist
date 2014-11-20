@@ -32,7 +32,7 @@ class TodoListManager extends Ab_ModuleManager {
 
 		TodoListManager::$instance = $this;
 
-		$this->config = new TodoListConfig(Abricos::$config['module']['todolist']);
+		$this->config = new TodoListConfig(isset(Abricos::$config['module']['todolist']) ? Abricos::$config['module']['todolist'] : array());
 	}
 	
 	public function IsAdminRole(){
