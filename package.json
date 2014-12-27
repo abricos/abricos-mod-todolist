@@ -1,0 +1,24 @@
+{
+  "name": "abricos-mod-todolist",
+  "description": "Todolist Module for Abricos Platform",
+  "version": "0.1.3",
+  "author": {
+    "name": "Alexander Kuzmin",
+    "email": "roosit@abricos.org",
+    "web": "http://abricos.org",
+    "twitter": "roositab"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abricos/abricos-mod-todolist.git"
+  },
+  "keywords": [
+    "abricos",
+    "todolist"
+  ],
+  "bugs": {
+    "url": "https://github.com/abricos/abricos-mod-todolist/issues"
+  },
+  "homepage": "http://abricos.org/mods/todolist/"
+}

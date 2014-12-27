@@ -17,7 +17,7 @@ class TodoListModule extends Ab_Module {
 	
 	public function TodoListModule(){
 		// версия модуля
-		$this->version = "0.1.2";
+		$this->version = "{C#VERSION}";
 
 		// имя модуля 
 		$this->name = "todolist";
