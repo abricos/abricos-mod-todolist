@@ -422,7 +422,7 @@ class TodoListManager extends Ab_ModuleManager {
             array(
                 "name" => "todolist",
                 "title" => $i18n['bosmenu']['todolist'],
-                "icon" => "/modules/todolist/images/todolist-24.png",
+                "icon" => "{C#ASSETS}/images/todolist-24.png",
                 "url" => "todolist/wspace/ws/"
             )
         );
