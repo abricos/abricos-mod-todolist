@@ -38,14 +38,14 @@
 }
 
 .aw-todolist .todolist .elrow .shadow {
-    background: url("/modules/todolist/images/shadow.png") repeat-y scroll 0 0 transparent;
+    background: url("{C#ASSETS}/images/shadow.png") repeat-y scroll 0 0 transparent;
     width: 16px;
 	height: 1.3em;
     position: absolute;
     right: 0; top: 3px;
 }
 .aw-todolist .todolist .elrow:hover .shadow {
-    background: url("/modules/todolist/images/shadow-row.png") repeat-y scroll 0 0 transparent;
+    background: url("{C#ASSETS}/images/shadow-row.png") repeat-y scroll 0 0 transparent;
 }
 .aw-todolist .todolist .elrow .rborder {
 	border: 1px solid #D1D3DC;
