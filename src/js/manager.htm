@@ -1,11 +1,11 @@
 <!--{widget}-->
-<div id="{i#id}" class="manager">
+<div class="manager">
 
-    <div id="{i#loading}" class="loading">
+    <div data-wait="show" class="loading">
         <img src="/images/loading.gif"/> Идет загрузка данных <br/> Пожалуйста, подождите...
     </div>
 
-    <div id="{i#view}" style="display: none" class="row">
+    <div id="{i#view}" data-wait="hide" class="row">
 
         <div class="col-md-3">
 
@@ -14,8 +14,8 @@
                     <span>Разделы</span>
 
                     <div id="{i#menu}" class="boxbutton">
-                        <div id="{i#baddgroup}" class="b" title="Добавить раздел">
-                            <div id="{i#baddgroupc}" class="badd bc"></div>
+                        <div data-click="addgroup" class="b" title="Добавить раздел">
+                            <div class="badd bc"></div>
                         </div>
                     </div>
                 </div>
@@ -29,12 +29,12 @@
         <div class="col-md-9">
             <div class="manbtns">
                 <div class="lft">
-                    <span id="{i#filterbtns}" style="display: none">
+                    <span id="{i#filterbtns}" class="hide">
                         Фильтр: <span id="{i#grouptl}"></span> &nbsp;
-                        (<a id="{i#bclearfilter}" href="#" class="habtn bclearfilter">показать все</a>)
+                        (<a data-click="clearfilter" href="#" class="habtn bclearfilter">показать все</a>)
                     </span>
                 </div>
-                <a id="{i#baddtodo}" href="#" class="habtn">+ Добавить дело</a>
+                <a data-click="addtodo" href="#" class="habtn">+ Добавить дело</a>
             </div>
 
             <div id="{i#todolist}"></div>

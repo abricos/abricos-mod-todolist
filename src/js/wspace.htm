@@ -1,49 +1,37 @@
-<!--{panel}-->
-<div class='hd'>Дела</div>
-<div class='bd aw-todolist'>
-    <div id="{i#widget}"></div>
-</div>
-
 <!--{widget}-->
-<div id="{i#id}" class="wspace">
-    <div id="{i#gmenu}" class="app-nav">
+<div class="app-workspace aw-todolist">
+
+    <div class="app-nav">
         <nav class="navbar navbar-default" role="navigation">
             <div class="container-fluid">
-
                 <div class="navbar-header">
-                    <a class="navbar-brand" href="#app={C#MODNAMEURI}/wspace/ws/">
+                    <a class="navbar-brand" data-url="ws" href="#">
                         <img class="icon" src="/modules/todolist/images/todolist-96.png"/>
                     </a>
                     <a class="navbar-brand" data-url="ws" href="#">
                         Дела
                     </a>
                 </div>
-
                 <ul class="nav navbar-nav">
-                    <li id="{i#mmanager}">
-                        <a href="{v#urlmanager}" class="sel" title="">Список дел</a>
+                    <li>
+                        <a data-url="ws" href="#">Список дел</a>
                     </li>
+                </ul>
+                <ul class="nav navbar-nav pull-right" data-wait="show">
+                    <li><a href="#" data-url="ws">
+                        <img src="/images/loading.gif"/></a></li>
                 </ul>
             </div>
         </nav>
     </div>
 
-    <div id="{i#loading}" class="ws-loading">
-        <img src="/images/loading.gif"/> Идет загрузка данных <br/>Пожалуйста, подождите...
+    <div data-wait="show" class="text-center">
+        <img src="/images/loading.gif"/>
+
+        <p>Идет загрузка данных</p>
+
+        <p>Пожалуйста, подождите...</p>
     </div>
-    <div id="{i#board}" class="board" style="display: none"></div>
-</div>
 
-<!--{page}-->
-<div id="{i#id}" class='wspage'></div>
-
-<!--{home}-->
-<div id="{i#id}" class='wspage'>Добро пожаловать</div>
-
-<!--{accessdenied}-->
-<div id="{i#id}" class='wspage'>
-    <div class="ws-loading">
-        Доступ запрещен <br/>
-        У вас недостаточно прав, или необходимо зарегистрироваться.
-    </div>
+    <div class="app-workspace-page" data-wait="hide"></div>
 </div>

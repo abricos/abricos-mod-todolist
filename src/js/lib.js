@@ -1,10 +1,15 @@
 var Component = new Brick.Component();
 Component.requires = {
     mod: [
+        {name: 'sys', files: ['container.js']},
         {name: 'widget', files: ['lib.js', 'notice.js']}
     ]
 };
 Component.entryPoint = function(NS){
+
+    var Y = Brick.YUI,
+        COMPONENT = this,
+        SYS = Brick.mod.sys;
 
     NS.roles = new Brick.AppRoles('{C#MODNAME}', {
         isAdmin: 50,
@@ -12,10 +17,28 @@ Component.entryPoint = function(NS){
         isView: 10
     });
 
+    SYS.Application.build(COMPONENT, {}, {
+        initializer: function(){
+            this.initCallbackFire();
+        }
+    }, [], {
+        ATTRS: {
+            isLoadAppStructure: {value: false},
+        },
+        REQS: {
+        },
+        URLS: {
+            ws: "#app={C#MODNAMEURI}/wspace/ws/",
+            manager: {
+                view: function(){
+                    return this.getURL('ws') + 'manager/ManagerWidget/'
+                }
+            }
+        }
+    });
+
     var L = YAHOO.lang,
         R = NS.roles;
-
-    var SysNS = Brick.mod.sys;
 
     var buildTemplate = this.buildTemplate;
     buildTemplate({}, '');
@@ -28,8 +51,8 @@ Component.entryPoint = function(NS){
         f = NS.lif(f);
         f(p1, p2, p3, p4, p5, p6, p7);
     };
-    NS.Item = SysNS.Item;
-    NS.ItemList = SysNS.ItemList;
+    NS.Item = SYS.Item;
+    NS.ItemList = SYS.ItemList;
 
     NS.textToEdit = function(s){
         return s.replace(/<br\/>/gi, '');
@@ -67,7 +90,7 @@ Component.entryPoint = function(NS){
         }, d || {});
         Dict.superclass.constructor.call(this, d);
     };
-    YAHOO.extend(Dict, SysNS.Item, {
+    YAHOO.extend(Dict, SYS.Item, {
         update: function(d){
             this.title = d['tl'];
         }
@@ -77,20 +100,20 @@ Component.entryPoint = function(NS){
     var DictList = function(d){
         DictList.superclass.constructor.call(this, d, Dict);
     };
-    YAHOO.extend(DictList, SysNS.ItemList, {});
+    YAHOO.extend(DictList, SYS.ItemList, {});
     NS.DictList = DictList;
 
 
     var Depend = function(d){
         Depend.superclass.constructor.call(this, d);
     };
-    YAHOO.extend(Depend, SysNS.Item, {});
+    YAHOO.extend(Depend, SYS.Item, {});
     NS.Depend = Depend;
 
     var DependList = function(d){
         DependList.superclass.constructor.call(this, d, Depend);
     };
-    YAHOO.extend(DependList, SysNS.ItemList, {});
+    YAHOO.extend(DependList, SYS.ItemList, {});
     NS.DependList = DependList;
 
 
@@ -103,7 +126,7 @@ Component.entryPoint = function(NS){
         }, d || {});
         Priority.superclass.constructor.call(this, d);
     };
-    YAHOO.extend(Priority, SysNS.Item, {
+    YAHOO.extend(Priority, SYS.Item, {
         update: function(d){
             this.title = d['tl'];
             this.color = d['clr'];
@@ -116,7 +139,7 @@ Component.entryPoint = function(NS){
     var PriorityList = function(d){
         PriorityList.superclass.constructor.call(this, d, Priority);
     };
-    YAHOO.extend(PriorityList, SysNS.ItemList, {
+    YAHOO.extend(PriorityList, SYS.ItemList, {
         getDefaultId: function(){
             var defid = 0;
             this.foreach(function(priotiry){
@@ -137,7 +160,7 @@ Component.entryPoint = function(NS){
         }, d || {});
         Group.superclass.constructor.call(this, d);
     };
-    YAHOO.extend(Group, SysNS.Item, {
+    YAHOO.extend(Group, SYS.Item, {
         init: function(d){
             this.todoCount = 0;
             Group.superclass.init.call(this, d);
@@ -154,7 +177,7 @@ Component.entryPoint = function(NS){
             'order': '!order'
         });
     };
-    YAHOO.extend(GroupList, SysNS.ItemList, {});
+    YAHOO.extend(GroupList, SYS.ItemList, {});
     NS.GroupList = GroupList;
 
     var Todo = function(d){
@@ -172,7 +195,7 @@ Component.entryPoint = function(NS){
         }, d || {});
         Todo.superclass.constructor.call(this, d);
     };
-    YAHOO.extend(Todo, SysNS.Item, {
+    YAHOO.extend(Todo, SYS.Item, {
         init: function(d){
             this.dependList = new NS.DependList();
             Todo.superclass.init.call(this, d);
@@ -346,7 +369,7 @@ Component.entryPoint = function(NS){
             'order': todoListOrder
         });
     };
-    YAHOO.extend(TodoList, SysNS.ItemList, {});
+    YAHOO.extend(TodoList, SYS.ItemList, {});
     NS.TodoList = TodoList;
 
 

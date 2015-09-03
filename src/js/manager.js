@@ -6,41 +6,32 @@ Component.requires = {
 };
 Component.entryPoint = function(NS){
 
-    var Dom = YAHOO.util.Dom,
-        L = YAHOO.lang,
-        R = NS.roles,
-        buildTemplate = this.buildTemplate;
+    var Y = Brick.YUI,
+        COMPONENT = this,
+        SYS = Brick.mod.sys;
 
-    var ManagerWidget = function(container){
-        ManagerWidget.superclass.constructor.call(this, container, {
-            'buildTemplate': buildTemplate, 'tnames': 'widget'
-        });
-    };
-    YAHOO.extend(ManagerWidget, Brick.mod.widget.Widget, {
-        init: function(){
-            this.wsMenuItem = 'manager'; // использует wspace.js
-            this.groupListWidget = null;
-            this.todoListWidget = null;
-        },
-        destroy: function(){
-            if (!L.isNull(this.groupListWidget)){
-                this.groupListWidget.destroy();
-                this.todoListWidget.destroy();
-            }
-            ManagerWidget.superclass.destroy.call(this);
-        },
-        onLoad: function(seventid){
+    NS.ManagerWidget = Y.Base.create('managerWidget', SYS.AppWidget, [], {
+        onInitAppWidget: function(err, appInstance){
+            this.set('waiting', true);
+
             var __self = this;
             NS.initManager(function(){
                 __self._onLoadManager();
             });
         },
+        destructor: function(){
+            if (this.groupListWidget){
+                this.groupListWidget.destroy();
+                this.todoListWidget.destroy();
+            }
+        },
         _onLoadManager: function(){
-            this.elHide('loading');
-            this.elShow('view');
-            var __self = this;
+            this.set('waiting', false);
 
-            var glWidget = this.groupListWidget = new NS.GroupListWidget(this.gel('groplist'), {
+            var tp = this.template,
+                __self = this;
+
+            var glWidget = this.groupListWidget = new NS.GroupListWidget(tp.gel('groplist'), {
                 'onSelectedItem': function(groupid){
                     __self.setFilter({'groupid': groupid});
                 },
@@ -52,24 +43,23 @@ Component.entryPoint = function(NS){
                     __self.todoListWidget.renderList();
                 }
             });
-            this.todoListWidget = new NS.TodoListWidget(this.gel('todolist'), {
+            this.todoListWidget = new NS.TodoListWidget(tp.gel('todolist'), {
                 'onGroupClick': function(groupid){
                     glWidget.selectGroupById(groupid);
                 }
             });
         },
-        onClick: function(el, tp){
-            switch (el.id) {
-                case tp['baddtodo']:
+        onClick: function(e){
+            switch (e.dataClick) {
+                case 'addtodo':
                     this.showNewTodoEditor();
                     return true;
-                case tp['baddgroup']:
-                case tp['baddgroupc']:
+                case 'addgroup':
                     this.showNewGroupEditor();
                     return true;
-                case tp['bclearfilter']:
+                case 'clearfilter':
                     this.setFilter(null);
-                    break;
+                    return true;
             }
         },
         showNewTodoEditor: function(){
@@ -80,19 +70,27 @@ Component.entryPoint = function(NS){
         },
         setFilter: function(filter){
             filter = filter || null;
+
+            var tp = this.template;
+
             this.todoListWidget.setFilter(filter);
-            if (L.isObject(filter) && filter['groupid'] | 0 > 0){
+
+            if (Y.Lang.isObject(filter) && filter['groupid'] | 0 > 0){
                 var group = NS.manager.groupList.get(filter['groupid']);
-                if (L.isValue(group)){
-                    this.elSetHTML('grouptl', group.title);
-                    this.elShow('filterbtns');
+                if (group){
+                    tp.setHTML('grouptl', group.title);
+                    tp.show('filterbtns');
                 }
             } else {
-                this.elSetHTML('grouptl', '');
-                this.elHide('filterbtns');
+                tp.setHTML('grouptl', '');
+                tp.hide('filterbtns');
                 this.groupListWidget.selectGroupById(0);
             }
         }
+    }, {
+        ATTRS: {
+            component: {value: COMPONENT},
+            templateBlockName: {value: 'widget'}
+        }
     });
-    NS.ManagerWidget = ManagerWidget;
 };
