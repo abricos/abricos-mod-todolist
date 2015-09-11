@@ -124,6 +124,7 @@ class TodoListManager extends Ab_ModuleManager {
             $this->PrioritySave(0, $this->ArrayToObject(array(
                 "tl" => "Нормальный",
                 "ord" => 2,
+                "clr" => "",
                 "def" => 1
             )));
             $this->PrioritySave(0, $this->ArrayToObject(array(
