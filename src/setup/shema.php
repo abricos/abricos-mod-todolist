@@ -193,6 +193,3 @@ if ($updateManager->isUpdate('0.1.2')){
     );
 
 }
-
-
-?>

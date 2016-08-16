@@ -495,5 +495,3 @@ class TodoListManager extends Ab_ModuleManager {
     }
 
 }
-
-?>

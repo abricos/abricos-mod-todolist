@@ -19,7 +19,7 @@ class TodoListModule extends Ab_Module {
 
     private $_manager = null;
 
-    public function TodoListModule(){
+    public function __construct(){
         // версия модуля
         $this->version = "0.1.3";
 
@@ -61,8 +61,7 @@ class TodoListAction {
 
 class TodoListPermission extends Ab_UserPermission {
 
-    public function TodoListPermission(TodoListModule $module){
-
+    public function __construct(TodoListModule $module){
         $defRoles = array(
             new Ab_UserRole(TodoListAction::VIEW, Ab_UserGroup::REGISTERED),
             new Ab_UserRole(TodoListAction::VIEW, Ab_UserGroup::ADMIN),
@@ -86,6 +85,3 @@ class TodoListPermission extends Ab_UserPermission {
 }
 
 Abricos::ModuleRegister(new TodoListModule());
-
-
-?>

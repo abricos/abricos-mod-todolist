@@ -10,4 +10,3 @@ return array(
         "todolist" => "Дела"
     )
 );
-?>
